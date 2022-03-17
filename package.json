@@ -1,0 +1,31 @@
+{
+  "name": "testing",
+  "version": "1.0.0",
+  "description": "Benjamin's Discord Bot",
+  "main": "index.js",
+  "dependencies": {
+    "@discordjs/rest": "^0.3.0",
+    "@tmware/status-rotate": "^1.2.9",
+    "discord-api-types": "^0.24.0",
+    "discord.js": "^13.6.0",
+    "fs-constants": "^1.0.0",
+    "fs-extra": "^10.0.0",
+    "fs-then-native": "^2.0.0",
+    "fs.realpath": "^1.0.0",
+    "fstream": "^1.0.12",
+    "util": "^0.12.4",
+    "util-deprecate": "^1.0.2",
+    "uuid": "^3.4.0"
+  },
+  "scripts": {
+    "start": "node deploy-commands.js && node index.js",
+    "bot": "node index.js",
+    "commands": "node deploy-commands.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.8.0"
+  }
+}

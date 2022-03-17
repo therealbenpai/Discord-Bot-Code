@@ -1,0 +1,112 @@
+01/28/22 06:32:34 PM :
+    - UserID: 783855260300869632
+    - Command: botkill
+    - Session UUID: 9c3bff71-2569-4a1e-abc4-777d8d6afc98
+01/28/22 06:41:18 PM :
+    - UserID: 783855260300869632
+    - Command: eannounce
+    - Session UUID: 55e59efd-3f20-41b6-a474-9ab86162986e
+01/28/22 09:32:04 PM :
+    - UserID: 783855260300869632
+    - Command: about
+    - Session UUID: 55e59efd-3f20-41b6-a474-9ab86162986e
+01/29/22 05:20:23 PM :
+    - UserID: 783855260300869632
+    - Command: session
+    - Session UUID: 0b73d90c-688e-43cf-9323-866936ccdb12
+01/29/22 05:20:23 PM :
+    - UserID: 783855260300869632
+    - Command: session
+    - Session UUID: 55e59efd-3f20-41b6-a474-9ab86162986e
+02/02/22 11:24:29 AM :
+    - UserID: 783855260300869632
+    - Command: testembed
+    - Session UUID: e0a97038-ace2-4823-aed7-e5ba5d35e1be
+02/02/22 01:44:51 PM :
+    - UserID: 783855260300869632
+    - Command: echo
+    - Session UUID: fd406e05-1e99-4cb9-867e-d601759a7e71
+02/02/22 01:47:19 PM :
+    - UserID: 783855260300869632
+    - Command: session
+    - Session UUID: fd406e05-1e99-4cb9-867e-d601759a7e71
+02/02/22 01:48:17 PM :
+    - UserID: 730887743361777685
+    - Command: sotd
+    - Session UUID: fd406e05-1e99-4cb9-867e-d601759a7e71
+02/02/22 01:52:22 PM :
+    - UserID: 730887743361777685
+    - Command: status
+    - Session UUID: fd406e05-1e99-4cb9-867e-d601759a7e71
+02/02/22 03:14:41 PM :
+        - UserID: 730887743361777685
+        - Command: status
+        - Session UUID: 4148ff4b-f5cb-4d7a-b189-1cebc14e2859
+02/02/22 03:14:49 PM :
+        - UserID: 730887743361777685
+        - Command: status
+        - Session UUID: 4148ff4b-f5cb-4d7a-b189-1cebc14e2859
+02/02/22 03:24:21 PM :
+        - UserID: 783855260300869632
+        - Command: session
+        - Session UUID: 4148ff4b-f5cb-4d7a-b189-1cebc14e2859
+02/02/22 03:40:50 PM :
+        - UserID: 783855260300869632
+        - Command: session
+        - Session UUID: eb7d1a88-2cf5-40c7-b38f-dc859bc8aca4
+02/02/22 03:44:58 PM :
+        - UserID: 783855260300869632
+        - Command: status
+        - Session UUID: eb7d1a88-2cf5-40c7-b38f-dc859bc8aca4
+02/02/22 03:49:28 PM :
+        - UserID: 783855260300869632
+        - Command: session
+        - Session UUID: a1cc87af-806e-4b61-9b29-71bcd9c4edd0
+02/02/22 03:51:09 PM :
+        - UserID: 783855260300869632
+        - Command: status
+        - Session UUID: a1cc87af-806e-4b61-9b29-71bcd9c4edd0
+02/02/22 03:58:36 PM :
+        - UserID: 783855260300869632
+        - Command: session
+        - Session UUID: a1cc87af-806e-4b61-9b29-71bcd9c4edd0
+02/02/22 08:56:56 PM :
+        - UserID: 783855260300869632
+        - Command: echo
+        - Session UUID: 09447903-8b0b-4533-89f6-5217d6f5afc3
+02/02/22 08:57:22 PM :
+        - UserID: 783855260300869632
+        - Command: echo
+        - Session UUID: 09447903-8b0b-4533-89f6-5217d6f5afc3
+02/02/22 09:04:56 PM :
+        - UserID: 783855260300869632
+        - Command: sotd
+        - Session UUID: 09447903-8b0b-4533-89f6-5217d6f5afc3
+02/02/22 09:32:08 PM :
+        - UserID: 783855260300869632
+        - Command: echo
+        - Session UUID: 09447903-8b0b-4533-89f6-5217d6f5afc3
+02/03/22 09:46:05 AM :
+        - UserID: 783855260300869632
+        - Command: session
+        - Session UUID: 09447903-8b0b-4533-89f6-5217d6f5afc3
+02/03/22 06:59:03 PM :
+        - UserID: 783855260300869632
+        - Command: session
+        - Session UUID: 09447903-8b0b-4533-89f6-5217d6f5afc3
+02/03/22 07:52:45 PM :
+        - UserID: 783855260300869632
+        - Command: echo
+        - Session UUID: 1f9470b6-6a1c-40d1-95fd-a04c3d4fab01
+02/03/22 07:52:53 PM :
+        - UserID: 783855260300869632
+        - Command: testembed
+        - Session UUID: 1f9470b6-6a1c-40d1-95fd-a04c3d4fab01
+02/03/22 07:53:47 PM :
+        - UserID: 783855260300869632
+        - Command: session
+        - Session UUID: 1f9470b6-6a1c-40d1-95fd-a04c3d4fab01
+02/04/22 01:12:00 PM :
+        - UserID: 783855260300869632
+        - Command: session
+        - Session UUID: 4819d2b5-80bf-4fe1-a9cd-95b35108b176
