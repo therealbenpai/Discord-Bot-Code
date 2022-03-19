@@ -12,6 +12,7 @@ function loga(user, cmdname) {
         function () { }
     )
 }
+
 function logd(user, cmdname) {
     fs.appendFile(
         './logs/denycmd.log',
@@ -22,6 +23,7 @@ function logd(user, cmdname) {
         function () { }
     )
 }
+
 function loge(user, message, exp) {
     fs.appendFile(
         './logs/echo.log',
@@ -33,6 +35,7 @@ function loge(user, message, exp) {
         function () { }
     )
 }
+
 function logs() {
     fs.appendFile(
         './logs/session.log',
@@ -43,6 +46,7 @@ function logs() {
         function () { }
     )
 }
+
 function logr(user, message, exp, enduser) {
     fs.appendFile(
         './logs/rdm.log',
@@ -56,8 +60,18 @@ function logr(user, message, exp, enduser) {
     )
 }
 
+function logerr(error) {
+    fs.appendFile(
+        './logs/errorlog.log',
+        `${cuf.getFullDate()} :
+        - Error: ${error}\n`,
+        function() { }
+    )
+}
+
 exports.loga = loga
 exports.logd = logd
 exports.loge = loge
 exports.logs = logs
 exports.logr = logr
+exports.logerr = logerr
