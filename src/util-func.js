@@ -31,13 +31,27 @@ const colorp = {
 	]
 }
 
+function isDST(d) {
+	const jan = new Date(d.getFullYear(),0,1).getTimezoneOffset()
+	const jul = new Date(d.getFullYear(),6,1).getTimezoneOffset()
+	return Math.max(jan,jul) !== d.getTimezoneOffset()
+}
+
 function getTime() {
-	const datemod = new Date()
-	const time = datemod.toLocaleTimeString('en-US', { timeZone: 'EST', hour: '2-digit', minute: '2-digit', second: '2-digit' })
-	return time
+	let datemod = new Date()
+	const cdate = Date.now()
+	let dst = isDST(datemod)
+	if (dst === true) {
+		datemod = new Date(cdate + (3600*1000))
+		const time = datemod.toLocaleTimeString('en-US', { timeZone: 'EST', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+		return time
+	} else {
+		const time = datemod.toLocaleTimeString('en-US', { timeZone: 'EST', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+		return time
+	}
 }
 function getDate() {
-	const datemod = new Date();
+	let datemod = new Date();
 	const date = datemod.toLocaleDateString('en-US', { timeZone: 'EST', year: "2-digit", month: "2-digit", day: "2-digit" })
 	return date;
 }
