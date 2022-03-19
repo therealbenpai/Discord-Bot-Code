@@ -1,6 +1,6 @@
-logs/session.log
-logs/rdm.log
-logs/errorlog.log
-logs/echo.logs
-logs/denycmd.log
-logs/allowcmd.log
+/logs/session.log
+/logs/rdm.log
+/logs/errorlog.log
+/logs/echo.logs
+/logs/denycmd.log
+/logs/allowcmd.log
