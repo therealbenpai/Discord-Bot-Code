@@ -48,8 +48,8 @@ Updater.start(1000 * seconds)
 client.on(`interactionCreate`, async interaction => {
 	if (!interaction.isCommand()) return;
 
-	async function deny(user,cmd) {
-		await cLog.logd(user,cmd)
+	async function deny(user, cmd) {
+		await cLog.logd(user, cmd)
 		await interaction.reply({
 			content: `<:mhdeny:936031945337479288> <@${user.id}> You don't have the correct permissions to use ${cmd}`,
 			ephemeral: true
@@ -105,55 +105,45 @@ client.on(`interactionCreate`, async interaction => {
 			const msgstr = string.split(` by `);
 			const link = interaction.options.getString(`link`);
 			const schannel = client.channels.cache.get(channelid[0]);
-			const embed = new MessageEmbed()
+			let embed;
 			if (link == undefined || null) {
-				embed
-					.setAuthor(
-						interuser.tag,
-						interuser.displayAvatarURL({ dynamic: true })
-					)
-					.setTitle(`Song Of The Day`)
-					.setDescription(
-						`**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n` +
-						`**` +
-						msgstr[0] +
-						`**` +
-						` by ` +
-						`**` +
-						msgstr[1] +
-						`**`
-					)
-					.setColor(cuf.rtbSpect())
-					.setTimestamp()
-					.setFooter(
-						`Choosen by: ` + interuser.tag,
-						interuser.displayAvatarURL({ dynamic: true })
-					);
+				embed = {
+					color: cuf.rtbSpect(),
+					author: {
+						name: interuser.tag,
+						icon_url: interuser.displayAvatarURL({ dynamic: true })
+					},
+					title: `Song Of The Day`,
+					discription: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+					timestamp: new Date(),
+					footer: {
+						text: `Choosen by: ` + interuser.tag,
+						icon_url: interuser.displayAvatarURL({ dynamic: true })
+					}
+				}
 			}
 			else {
-				embed
-					.setAuthor(
-						interuser.tag,
-						interuser.displayAvatarURL({ dynamic: true })
-					)
-					.setTitle(`Song Of The Day`)
-					.setDescription(
-						`**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n` +
-						`**` +
-						msgstr[0] +
-						`**` +
-						` by ` +
-						`**` +
-						msgstr[1] +
-						`**\n`
-					)
-					.addField(`Link:`, `[Song Link](` + link + `)`, true)
-					.setColor(cuf.rtbSpect())
-					.setTimestamp()
-					.setFooter(
-						`Choosen by: ` + interuser.tag,
-						interuser.displayAvatarURL({ dynamic: true })
-					);
+				embed = {
+					color: cuf.rtbSpect(),
+					author: {
+						name: interuser.tag,
+						icon_url: interuser.displayAvatarURL({ dynamic: true })
+					},
+					title: `Song Of The Day`,
+					discription: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+					fields: [
+						{
+							name: 'Link:',
+							value: `[Song Link](${link})`,
+							inline: true
+						}
+					],
+					timestamp: new Date(),
+					footer: {
+						text: `Choosen by: ` + interuser.tag,
+						icon_url: interuser.displayAvatarURL({ dynamic: true })
+					}
+				}
 			}
 			cLog.loga(interuser, `sotd`);
 			schannel.send({ content: `<@&771928489166897202>`, embeds: [embed] });
@@ -169,50 +159,25 @@ client.on(`interactionCreate`, async interaction => {
 	else if (commandName === `newchannel`) {
 		interaction.reply(`nope not in the mood`);
 	}
-	else if (commandName === `testembed`) {
-		const exampleEmbed = new MessageEmbed()
-			.setColor(cuf.randHex(`#`))
-			.setTitle(`Some title`)
-			.setURL(`https://discord.js.org/`)
-			.setAuthor(
-				interuser.username,
-				interuser.displayAvatarURL({ dynamic: true }),
-				`https://discord.js.org`
-			)
-			.setDescription(`Some description here`)
-			.addFields(
-				{ name: `Regular field title`, value: `Some value here` },
-				{ name: `\u200B`, value: `\u200B` },
-				{ name: `Inline field title`, value: `Some value here`, inline: true },
-				{ name: `Inline field title`, value: `Some value here`, inline: true }
-			)
-			.addField(`Inline field title`, `Some value here`, true)
-			.setTimestamp()
-			.setFooter(`Some footer text here`, `https://i.imgur.com/AfFp7pu.png`);
-		cLog.loga(interuser, `testembed`);
-		interaction.channel.send({ embeds: [exampleEmbed] });
-		await interaction.deferReply({ ephemeral: true });
-		await wait(10000);
-		await interaction.editReply(`\u2800`);
-	}
 	else if (commandName === `ad`) {
 		const adchannel = client.channels.cache.get(channelid[1]);
 		const title = interaction.options.getString(`title`);
 		const description = interaction.options.getString(`description`);
 		const link = interaction.options.getString(`link`);
-		const nembed = new MessageEmbed()
-			.setColor(cuf.randHex(`#`))
-			.setTitle(title)
-			.setURL(link)
-			.setAuthor(
-				interuser.tag,
-				interuser.displayAvatarURL({ dynamic: true })
-			)
-			.setDescription(description)
-			.setTimestamp()
-			.setFooter(
-				`Advertisment is not directly supported by Mango Hangout. This was posted by a member of the community`
-			);
+		const nembed = {
+			color: cuf.randHex('#'),
+			title: title,
+			url:link,
+			author: {
+				name: interuser.tag,
+				icon_url: interuser.displayAvatarURL({ dynamic: true })
+			},
+			description: description,
+			timestamp: new Date(),
+			footer: {
+				text: `Advertisment is not directly supported by Mango Hangout. This was posted by a member of the community`
+			}
+		}
 		adchannel.send({ embeds: [nembed] });
 		interaction.reply(`<:mhallow:936031945027096586> Posted!`);
 		cLog.loga(interuser, `ad`);
@@ -272,33 +237,23 @@ client.on(`interactionCreate`, async interaction => {
 			const pingbol = interaction.options.getBoolean(`ping`);
 			const content = interaction.options.getString(`content`);
 			const achannel = client.channels.cache.get(channelid[2]);
+			let embed = {
+				color: cuf.randHex('#'),
+				title: 'Announcement',
+				author: {
+					name: interuser.tag,
+					icon_url: interuser.displayAvatarURL({ dynamic: true })
+				},
+				description: content,
+				timestamp: new Date(),
+				footer: {
+					text: 'Annoumcement Pog'
+				}
+			}
 			if (pingbol === true) {
 				achannel.send(`<@&777654579361349682>`);
-				const nembed = new MessageEmbed()
-					.setColor(cuf.randHex(`#`))
-					.setTitle(`Announcement`)
-					.setAuthor(
-						interuser.tag,
-						interuser.displayAvatarURL({ dynamic: true })
-					)
-					.setDescription(content)
-					.setTimestamp()
-					.setFooter(`Announcement Pog`);
-				achannel.send({ embeds: [nembed] });
 			}
-			else {
-				const nembed = new MessageEmbed()
-					.setColor(cuf.randHex(`#`))
-					.setTitle(`Announcement`)
-					.setAuthor(
-						interuser.tag,
-						interuser.displayAvatarURL({ dynamic: true })
-					)
-					.setDescription(content)
-					.setTimestamp()
-					.setFooter(`Announcement Pog`);
-				achannel.send({ embeds: [nembed] });
-			}
+			achannel.send({ embeds: [embed] })
 			interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
 			cLog.loga(interuser, `eannounce`);
 		}
