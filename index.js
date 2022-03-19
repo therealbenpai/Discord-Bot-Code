@@ -48,10 +48,10 @@ Updater.start(1000 * seconds)
 client.on(`interactionCreate`, async interaction => {
 	if (!interaction.isCommand()) return;
 
-	async function deny(userid,cmd) {
-		await cLog.logd(userid,cmd)
+	async function deny(user,cmd) {
+		await cLog.logd(user,cmd)
 		await interaction.reply({
-			content: `<:mhdeny:936031945337479288> <@${userid}> You don't have the correct permissions to use ${cmd}`,
+			content: `<:mhdeny:936031945337479288> <@${user.id}> You don't have the correct permissions to use ${cmd}`,
 			ephemeral: true
 		})
 	}
@@ -85,18 +85,6 @@ client.on(`interactionCreate`, async interaction => {
 	}
 	else if (commandName === `user`) {
 		await interaction.reply(`User info.`);
-		/*
-	  } else if (commandName === `prune`) {
-		const amount = interaction.options.getInteger(`amount`);
-			if (amount <= 1 || amount > 100) {
-				return interaction.reply({ content: `You need to input a number between 1 and 99.`, ephemeral: true });
-			}
-			await interaction.channel.bulkDelete(amount, true).catch(error => {
-				console.error(error);
-				interaction.reply({ content: `There was an error trying to prune messages in this channel!`, ephemeral: true });
-			});
-	
-			interaction.reply({ content: `Successfully pruned ${amount} messages.`, ephemeral: true });*/
 	}
 	else if (commandName === `botkill`) {
 		if (interuser.id === userid[0] || userid[1]) {
@@ -104,7 +92,7 @@ client.on(`interactionCreate`, async interaction => {
 			cuf.endclient(interuser.tag);
 		}
 		else {
-			deny(interuser.id, `botkill`);
+			deny(interuser, `botkill`);
 		}
 	}
 	else if (commandName === `sotd`) {
@@ -167,7 +155,7 @@ client.on(`interactionCreate`, async interaction => {
 						interuser.displayAvatarURL({ dynamic: true })
 					);
 			}
-			cLog.loga(interuser.id, `sotd`);
+			cLog.loga(interuser, `sotd`);
 			schannel.send({ content: `<@&771928489166897202>`, embeds: [embed] });
 			await interaction.reply({
 				content: `<:mhallow:936031945027096586> Sent the SOTD embed`,
@@ -175,7 +163,7 @@ client.on(`interactionCreate`, async interaction => {
 			});
 		}
 		else {
-			deny(interuser.id, `sotd`);
+			deny(interuser, `sotd`);
 		}
 	}
 	else if (commandName === `newchannel`) {
@@ -201,7 +189,7 @@ client.on(`interactionCreate`, async interaction => {
 			.addField(`Inline field title`, `Some value here`, true)
 			.setTimestamp()
 			.setFooter(`Some footer text here`, `https://i.imgur.com/AfFp7pu.png`);
-		cLog.loga(interuser.id, `testembed`);
+		cLog.loga(interuser, `testembed`);
 		interaction.channel.send({ embeds: [exampleEmbed] });
 		await interaction.deferReply({ ephemeral: true });
 		await wait(10000);
@@ -227,7 +215,7 @@ client.on(`interactionCreate`, async interaction => {
 			);
 		adchannel.send({ embeds: [nembed] });
 		interaction.reply(`<:mhallow:936031945027096586> Posted!`);
-		cLog.loga(interuser.id, `ad`);
+		cLog.loga(interuser, `ad`);
 	}
 	else if (commandName === `addstaff`) {
 		if (intermember.roles.cache.has(roleid[1] || roleid[2])) {
@@ -235,7 +223,7 @@ client.on(`interactionCreate`, async interaction => {
 				const role = guild.roles.cache.find(role => role.id === roleid[0]);
 				intermember.roles.add(role);
 				interaction.reply({ content: `<:mhallow:936031945027096586> Added Staff Role`, ephemeral: true });
-				cLog.loga(interuser.id, `addstaff`);
+				cLog.loga(interuser, `addstaff`);
 			}
 			else {
 				interaction.reply({
@@ -245,7 +233,7 @@ client.on(`interactionCreate`, async interaction => {
 			}
 		}
 		else {
-			deny(interuser.id, `addstaff`);
+			deny(interuser, `addstaff`);
 		}
 	}
 	else if (commandName === `announce`) {
@@ -269,10 +257,10 @@ client.on(`interactionCreate`, async interaction => {
 				achannel.send(content + `\n\n**Sent by:** ` + interuser.tag);
 			}
 			interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
-			cLog.loga(interuser.id, `announce`);
+			cLog.loga(interuser, `announce`);
 		}
 		else {
-			deny(interuser.id, `announce`);
+			deny(interuser, `announce`);
 		}
 	}
 	else if (commandName === `eannounce`) {
@@ -312,10 +300,10 @@ client.on(`interactionCreate`, async interaction => {
 				achannel.send({ embeds: [nembed] });
 			}
 			interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
-			cLog.loga(interuser.id, `eannounce`);
+			cLog.loga(interuser, `eannounce`);
 		}
 		else {
-			deny(interuser.id, `eannounce`);
+			deny(interuser, `eannounce`);
 		}
 	}
 	else if (commandName === `about`) {
@@ -338,7 +326,7 @@ client.on(`interactionCreate`, async interaction => {
 				ephemeral: true
 			});
 		}
-		cLog.loga(interuser.id, `about`);
+		cLog.loga(interuser, `about`);
 	}
 	else if (commandName === `balls`) {
 		const member1 = intermember;
@@ -369,7 +357,7 @@ client.on(`interactionCreate`, async interaction => {
 				user.send(randreply.replys[cuf.arrayRNG(randreply.replys.length)]);
 			}
 		}
-		cLog.loga(interuser.id, `balls`);
+		cLog.loga(interuser, `balls`);
 	}
 	else if (commandName === `fixmute`) {
 		if (
@@ -380,7 +368,7 @@ client.on(`interactionCreate`, async interaction => {
 			intermember.roles.remove(role);
 			interaction.reply({ content: `Removed Muted Role`, ephemeral: true });
 		}
-		cLog.loga(interuser.id, `fixmute`);
+		cLog.loga(interuser, `fixmute`);
 	}
 	else if (commandName === `ban`) {
 		if (
@@ -391,10 +379,10 @@ client.on(`interactionCreate`, async interaction => {
 			const buserid = buser.id;
 			interaction.reply({ content: `Banned ` + buser.tag, ephemeral: true });
 			interaction.guild.bans.create(buserid);
-			cLog.loga(interuser.id, `ban`);
+			cLog.loga(interuser, `ban`);
 		}
 		else {
-			cLog.loga(interuser.id, `ban`);
+			cLog.loga(interuser, `ban`);
 		}
 	}
 	else if (commandName === `unban`) {
@@ -410,10 +398,10 @@ client.on(`interactionCreate`, async interaction => {
 			await interaction.guild.bans
 				.remove(ubuserid.toString())
 				.catch(console.error);
-			cLog.loga(interuser.id, `unban`);
+			cLog.loga(interuser, `unban`);
 		}
 		else {
-			cLog.loga(interuser.id, `unban`);
+			cLog.loga(interuser, `unban`);
 		}
 	}
 	else if (commandName === `echo`) {
@@ -428,8 +416,8 @@ client.on(`interactionCreate`, async interaction => {
 				ephemeral: true
 			});
 		}
-		cLog.loge(interuser.id, str, tr)
-		cLog.loga(interuser.id, `echo`);
+		cLog.loge(interuser, str, tr)
+		cLog.loga(interuser, `echo`);
 	}
 	else if (commandName === `truth`) {
 		let embed;
@@ -450,7 +438,7 @@ client.on(`interactionCreate`, async interaction => {
 				.setTimestamp()
 		}
 		interaction.reply({ embeds: [embed] })
-		cLog.loga(interuser.id, `truth`)
+		cLog.loga(interuser, `truth`)
 	}
 	else if (commandName === `dare`) {
 		const rn = cuf.arrayRNG(dare.length)
@@ -461,7 +449,7 @@ client.on(`interactionCreate`, async interaction => {
 			.setDescription(output)
 			.setTimestamp()
 		interaction.reply({ embeds: [embed] })
-		cLog.loga(interuser.id, `dare`)
+		cLog.loga(interuser, `dare`)
 	}
 	else if (commandName === `tod`) {
 		const choose = function () {
@@ -503,7 +491,7 @@ client.on(`interactionCreate`, async interaction => {
 				.setTimestamp()
 			interaction.reply({ embeds: [embed] })
 		}
-		cLog.loga(interuser.id, `tod`)
+		cLog.loga(interuser, `tod`)
 	}
 	else if (commandName == 'status') {
 		if (interuser.id === userid[0] || intermember.roles.cache.has(roleid[1])) {
@@ -515,13 +503,13 @@ client.on(`interactionCreate`, async interaction => {
 					name: cmessage
 				}
 			)
-			cLog.loga(interuser.id, 'status')
+			cLog.loga(interuser, 'status')
 			interaction.reply({
 				content: `Status Added`,
 				ephemeral: true
 			})
 		} else {
-			deny(interuser.id, 'status')
+			deny(interuser, 'status')
 		}
 	}
 	else if (commandName == 'innerval') {
@@ -542,7 +530,7 @@ client.on(`interactionCreate`, async interaction => {
 				console.log(`Status clock timer has been updated to ${seconds}s`)
 			}
 		} else {
-			cLog.logd(interuser.id, 'innerval')
+			cLog.logd(interuser, 'innerval')
 		}
 	}
 	else if (commandName == 'rdm') {
@@ -565,11 +553,11 @@ client.on(`interactionCreate`, async interaction => {
 			});
 		}
 		cLog.logr(interuser, str, tr, sEndUser)
-		cLog.loga(interuser.id, 'rdm')
+		cLog.loga(interuser, 'rdm')
 	}
 	else if (commandName == 'session') {
 		interaction.reply(`Session start = **${startTime}**\nSession UUID: **${sessionUUID}**`)
-		cLog.loga(interuser.id, `session`)
+		cLog.loga(interuser, `session`)
 	}
 	else if (commandName == 'randomfact') {
 		const random = cuf.arrayRNG(facts.length)
@@ -579,9 +567,10 @@ client.on(`interactionCreate`, async interaction => {
 			`${interuser.username}'s random fun fact: **${fact}**`
 		)
 		await interaction.followUp(`*fact id: **${factID}***`)
-		cLog.loga('randomfact')
-	} else if (commandName == 'feedback') {
+		cLog.loga(interuser, 'randomfact')
+	}
+	else if (commandName == 'feedback') {
 		interaction.reply(`<@${interuser.id}> Yow can submit feed back at https://forms.gle/9hMETLrL6ihvc5xv8`)
-		cLog.loga('feedback', interuser.id)
+		cLog.loga(interuser, 'feedback')
 	}
 });

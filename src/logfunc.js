@@ -6,7 +6,7 @@ function loga(user, cmdname) {
     fs.appendFile(
         './logs/allowcmd.log',
         `${cuf.getFullDate()} :
-        - UserID: ${user}
+        - UserID: ${user.id}
         - Command: ${cmdname}
         - Session UUID: ${sessionUUID}\n`,
         function () { }
@@ -16,7 +16,7 @@ function logd(user, cmdname) {
     fs.appendFile(
         './logs/denycmd.log',
         `${cuf.getFullDate()} :
-        - UserID: ${user}
+        - UserID: ${user.id}
         - Command: ${cmdname}
         - Session UUID: ${sessionUUID}\n`,
         function () { }
@@ -26,7 +26,7 @@ function loge(user, message, exp) {
     fs.appendFile(
         './logs/echo.log',
         `${cuf.getFullDate()} :
-        - UserID: ${user}
+        - UserID: ${user.id}
         - Message: "${message.toString()}"
         - Exp: ${exp.toString()}
         - Session UUID: ${sessionUUID}\n`,
