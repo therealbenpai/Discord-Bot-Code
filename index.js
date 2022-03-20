@@ -46,7 +46,7 @@ Updater.start(1000 * seconds)
 
 //? Command Handleing
 client.on(`interactionCreate`, async interaction => {
-	if (!interaction.isCommand()) return;
+	if (!interaction.isCommand()) return
 
 	async function deny(user, cmd) {
 		await cLog.logd(user, cmd)
