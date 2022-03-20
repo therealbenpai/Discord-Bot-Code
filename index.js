@@ -1,16 +1,16 @@
-//! Require the necessary discord.js classes
+//? Require the necessary discord.js classes
 const { Client, Collection, Intents, guild, MessageEmbed, channel, User } = require(`discord.js`);
 const { Builder, Embed } = require(`@discordjs/builders`);
 const wait = require(`util`).promisify(setTimeout);
 const StatusUpdater = require(`@tmware/status-rotate`)
 const uuid = require(`uuid`)
 
-//! Custom Utils
+//? Custom Utils
 const cLog = require('./src/logfunc')
 const { sessionUUID, startTime } = require('./src/util-vars')
 const cuf = require('./src/util-func')
 
-//! JSON Config Files
+//? JSON Config Files
 const { token } = require(`./config-files/config.json`);
 const { userid, channelid, roleid } = require(`./config-files/ids.json`);
 const { truth, dare } = require(`./config-files/tod.json`)
@@ -29,13 +29,13 @@ const statmsg = [
 const staffrole = roleid[0];
 var seconds = 10
 
-//! Discord Configuration
+//? Discord Configuration
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const Updater = new StatusUpdater(client, statmsg)
 
 //? On startup code
 client.once(`ready`, () => {
-	console.log(`Bot Started.\nStart Time: ${startTime}\nSession Code: ${sessionUUID}`);
+	console.log(`The bot has been properly started.\nStart Time: ${startTime}\nSession Code: ${sessionUUID}`);
 	cLog.logs()
 	Updater.updateStatus()
 });
@@ -168,7 +168,7 @@ client.on(`interactionCreate`, async interaction => {
 			const nembed = {
 				color: cuf.randHex('#'),
 				title: title,
-				url:link,
+				url: link,
 				author: {
 					name: interuser.tag,
 					icon_url: interuser.displayAvatarURL({ dynamic: true })
@@ -338,7 +338,7 @@ client.on(`interactionCreate`, async interaction => {
 				cLog.loga(interuser, `ban`);
 			}
 			else {
-				cLog.loga(interuser, `ban`);
+				deny(interuser, `ban`);
 			}
 		}
 		else if (commandName === `unban`) {
@@ -353,11 +353,10 @@ client.on(`interactionCreate`, async interaction => {
 				});
 				await interaction.guild.bans
 					.remove(ubuserid.toString())
-					.catch(console.error);
 				cLog.loga(interuser, `unban`);
 			}
 			else {
-				cLog.loga(interuser, `unban`);
+				deny(interuser, `unban`);
 			}
 		}
 		else if (commandName === `echo`) {
@@ -418,35 +417,38 @@ client.on(`interactionCreate`, async interaction => {
 				}
 			}
 			const todc = choose()
-			if (todc === `truth`) {
-				let embed;
-				if (interaction.user.id == "589972995825729559") {
-					embed = new MessageEmbed()
-						.setColor(cuf.randHex('#'))
-						.setTitle('Truth')
-						.setDescription("why are you horny 24/7?")
-						.setTimestamp()
-				} else {
-					const rn = cuf.arrayRNG(truth.length)
-					const output = truth[rn]
+			let embed;
+			switch (todc) {
+				case 'truth':
+					if (interaction.user.id == "589972995825729559") {
+						embed = new MessageEmbed()
+							.setColor(cuf.randHex('#'))
+							.setTitle('Truth')
+							.setDescription("why are you horny 24/7?")
+							.setTimestamp()
+					} else {
+						const rn = cuf.arrayRNG(truth.length)
+						const output = truth[rn]
+						embed = new MessageEmbed()
+							.setColor(cuf.randHex(`#`))
+							.setTitle(`Truth`)
+							.setDescription(output)
+							.setTimestamp()
+					}
+					break;
+				case 'dare':
+					const rn = cuf.arrayRNG(dare.length)
+					const output = dare[rn]
 					embed = new MessageEmbed()
 						.setColor(cuf.randHex(`#`))
-						.setTitle(`Truth`)
+						.setTitle(`Dare`)
 						.setDescription(output)
 						.setTimestamp()
-				}
-				interaction.reply({ embeds: [embed] })
+					break;
+				default:
+					throw new Error("The command `tod` threw an error (switch-case err)")
 			}
-			else {
-				const rn = cuf.arrayRNG(dare.length)
-				const output = dare[rn]
-				const embed = new MessageEmbed()
-					.setColor(cuf.randHex(`#`))
-					.setTitle(`Dare`)
-					.setDescription(output)
-					.setTimestamp()
-				interaction.reply({ embeds: [embed] })
-			}
+			interaction.reply({ embeds: [embed] })
 			cLog.loga(interuser, `tod`)
 		}
 		else if (commandName == 'status') {
@@ -490,25 +492,28 @@ client.on(`interactionCreate`, async interaction => {
 			}
 		}
 		else if (commandName == 'rdm') {
-			const randUserS = cuf.arrayRNG(rdmUsers.length)
-			const sEndUser = rdmUsers[randUserS]
-			const feu = client.users.fetch(sEndUser.toString(), false)
+			let euser;
 			const str = interaction.options.getString(`message`)
 			const tr = regexcheck.test(str);
-			if (!tr) {
-				let feu = client.users.fetch(`${sEndUser}`)
-					.then(user => user.send(`Message from anonymous user: ${str}`))
-				interaction.reply({
-					content: `Dm Sent`,
-					ephemeral: true
-				});
-			} else {
+			const randUserS = cuf.arrayRNG(rdmUsers.length)
+			const sEndUser = rdmUsers[randUserS]
+			if (tr) {
+				let feu = client.users.fetch(sEndUser.toString(), false)
+					.then(user => cLog.logr(interuser, str, tr, user))
 				interaction.reply({
 					content: `Message Contains Explicit Content`,
 					ephemeral: true
 				});
+				return;
+			} else {
+				let feu = client.users.fetch(sEndUser.toString(), false)
+					.then(function (user) { user.send(`Message from anonymous user: ${str}`); return user })
+					.then(user => cLog.logr(interuser, str, tr, user))
+				interaction.reply({
+					content: `Dm Sent`,
+					ephemeral: true
+				});
 			}
-			cLog.logr(interuser, str, tr, sEndUser)
 			cLog.loga(interuser, 'rdm')
 		}
 		else if (commandName == 'session') {
