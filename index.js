@@ -4,6 +4,7 @@ const { Builder, Embed } = require(`@discordjs/builders`);
 const wait = require(`util`).promisify(setTimeout);
 const StatusUpdater = require(`@tmware/status-rotate`)
 const uuid = require(`uuid`)
+const cmdUtil = require('node-cmd')
 
 //? Custom Utils
 const cLog = require('./src/logfunc')
@@ -28,6 +29,7 @@ const statmsg = [
 ]
 const staffrole = roleid[0];
 var seconds = 10
+const fStartTime = Date.now()
 
 //? Discord Configuration
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -533,6 +535,41 @@ client.on(`interactionCreate`, async interaction => {
 		else if (commandName == 'feedback') {
 			interaction.reply(`<@${interuser.id}> Yow can submit feed back at https://forms.gle/9hMETLrL6ihvc5xv8`)
 			cLog.loga(interuser, 'feedback')
+		}
+		else if (commandName == 'uptime') {
+			function getElapsedTime() {
+				const currentTime = Date.now()
+				const elapsedMS = currentTime - fStartTime
+				const elapedStr = new Date(elapsedMS).toLocaleTimeString('en-US', { timeZone: 'EST', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+				const str = `Bot Uptime Details:
+				Start Time: **${startTime}**
+				Current Time: **${cuf.getTime()}**
+				Elasped Time: **${elapedStr}**`
+				return str;
+			}
+			interaction.reply({
+				content: getElapsedTime(),
+				ephemeral: true
+			})
+			cLog.loga(interuser, 'uptime')
+		}
+		else if (commandName == 'restart') {
+			if (interuser.id === userid[0]) {
+				interaction.reply({ content: 'Restarting...', ephemeral: true })
+					.then(_ => client.destroy())
+					.then(_ => client.login(token))
+					.catch(
+						err => interaction.followUp({ content: `Restart failed due to: ${err}`, ephemeral: true })
+					)
+					.finally(_ => cLog.loga(interuser, 'restart'))
+			}
+			else {
+				deny(interuser, 'restart')
+			}
+		}
+		else {
+			console.error("A user has triggered this to run, but a valid command option wasn't found")
+			throw new Error("A user has triggered this to run, but a valid command option wasn't found")
 		}
 	} catch (err) {
 		cLog.logerr(err)
