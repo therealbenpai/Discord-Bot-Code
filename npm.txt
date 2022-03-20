@@ -1,0 +1,4 @@
+discord.js
+eslint
+util
+@tmware/status-rotate
