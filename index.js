@@ -117,7 +117,7 @@ client.on(`interactionCreate`, async interaction => {
 							icon_url: interuser.displayAvatarURL({ dynamic: true })
 						},
 						title: `Song Of The Day`,
-						discription: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+						description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
 						timestamp: new Date(),
 						footer: {
 							text: `Choosen by: ` + interuser.tag,
@@ -133,7 +133,7 @@ client.on(`interactionCreate`, async interaction => {
 							icon_url: interuser.displayAvatarURL({ dynamic: true })
 						},
 						title: `Song Of The Day`,
-						discription: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+						description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
 						fields: [
 							{
 								name: 'Link:',
