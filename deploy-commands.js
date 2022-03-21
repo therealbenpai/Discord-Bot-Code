@@ -9,7 +9,7 @@ For Command Files:
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+    data: new SlashCommandBuilder()
     .setName(name)
     .setDescription(description)
     .add#####Option(option =>
@@ -25,32 +25,32 @@ const gcommands = [].map(gcommand => gcommand.toJSON())
 const sscommands = [].map(command => command.toJSON());
 
 const sscommandFiles = fs
-  .readdirSync('./sscommands')
-  .filter(file => file.endsWith('.js'));
+    .readdirSync('./sscommands')
+    .filter(file => file.endsWith('.js'));
 
 for (const file of sscommandFiles) {
-  const command = require(`./sscommands/${file}`);
-  sscommands.push(command.data.toJSON());
+    const command = require(`./sscommands/${file}`);
+    sscommands.push(command.data.toJSON());
 }
 
 const gcommandFiles = fs
-  .readdirSync('./gcommands')
-  .filter(file => file.endsWith('.js'));
+    .readdirSync('./gcommands')
+    .filter(file => file.endsWith('.js'));
 
 for (const file of gcommandFiles) {
-  const command = require(`./gcommands/${file}`);
-  gcommands.push(command.data.toJSON());
+    const command = require(`./gcommands/${file}`);
+    gcommands.push(command.data.toJSON());
 }
 
 const rest1 = new REST({ version: '9' }).setToken(token);
 const rest2 = new REST({ version: '9' }).setToken(token);
 
 rest1
-  .put(Routes.applicationCommands(clientId), { body: gcommands })
-  .then(() => console.log('Successfully registered Global application commands.'))
-  .catch(console.error);
+    .put(Routes.applicationCommands(clientId), { body: gcommands })
+    .then(() => console.log('Successfully registered Global application commands.'))
+    .catch(console.error);
 
 rest2
-  .put(Routes.applicationGuildCommands(clientId, guildId), { body: sscommands })
-  .then(() => console.log('Successfully registered Guild application commands.'))
-  .catch(console.error);
+    .put(Routes.applicationGuildCommands(clientId, guildId), { body: sscommands })
+    .then(() => console.log('Successfully registered Guild application commands.'))
+    .catch(console.error);

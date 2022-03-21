@@ -117,7 +117,7 @@ client.on(`interactionCreate`, async interaction => {
 							icon_url: interuser.displayAvatarURL({ dynamic: true })
 						},
 						title: `Song Of The Day`,
-						discription: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+						description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
 						timestamp: new Date(),
 						footer: {
 							text: `Choosen by: ` + interuser.tag,
@@ -133,7 +133,7 @@ client.on(`interactionCreate`, async interaction => {
 							icon_url: interuser.displayAvatarURL({ dynamic: true })
 						},
 						title: `Song Of The Day`,
-						discription: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+						description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
 						fields: [
 							{
 								name: 'Link:',
@@ -536,23 +536,28 @@ client.on(`interactionCreate`, async interaction => {
 			interaction.reply(`<@${interuser.id}> Yow can submit feed back at https://forms.gle/9hMETLrL6ihvc5xv8`)
 			cLog.loga(interuser, 'feedback')
 		}
-		else if (commandName == 'uptime') {
-			function getElapsedTime() {
-				const currentTime = Date.now()
-				const elapsedMS = currentTime - fStartTime
-				const elapedStr = new Date(elapsedMS).toLocaleTimeString('en-US', { timeZone: 'EST', hour: '2-digit', minute: '2-digit', second: '2-digit' })
-				const str = `Bot Uptime Details:
-				Start Time: **${startTime}**
-				Current Time: **${cuf.getTime()}**
-				Elasped Time: **${elapedStr}**`
-				return str;
-			}
-			interaction.reply({
-				content: getElapsedTime(),
-				ephemeral: true
-			})
-			cLog.loga(interuser, 'uptime')
-		}
+		// else if (commandName == 'uptime') {
+		// 	function getElapsedTime() {
+		// 		const currentTime = null;
+		// 		const stime = {
+		// 			days : (fStartTime - (fStartTime % (24*60*60*1000))) / (24*60*60*1000),
+		// 			hours : ((fStartTime - (fStartTime % (60*60*1000))) / (60*60*1000)) % 24,
+		// 			minutes : ((fStartTime - (fStartTime % (60*1000))) / (60*1000)) % (24*60),
+		// 			seconds : ((fStartTime - (fStartTime % 1000)) / 1000) % (24*60*60)
+		// 		}
+		// 		const elapedStr = ``
+		// 		const str = `Bot Uptime Details:
+		// 		Start Time: **${startTime}**
+		// 		Current Time: **${cuf.getTime()}**
+		// 		Elasped Time: **${elapedStr}**`
+		// 		return str;
+		// 	}
+		// 	interaction.reply({
+		// 		content: getElapsedTime(),
+		// 		ephemeral: true
+		// 	})
+		// 	cLog.loga(interuser, 'uptime')
+		// }
 		else if (commandName == 'restart') {
 			if (interuser.id === userid[0]) {
 				interaction.reply({ content: 'Restarting...', ephemeral: true })
