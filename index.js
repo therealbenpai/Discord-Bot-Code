@@ -5,6 +5,7 @@ const wait = require(`util`).promisify(setTimeout);
 const StatusUpdater = require(`@tmware/status-rotate`)
 const fUUID = require(`uuid`)
 const cmdUtil = require('node-cmd')
+const fs = require('fs')
 
 //? Custom Utils
 const cLog = require('./src/logfunc')
@@ -568,7 +569,7 @@ client.on(`interactionCreate`, async interaction => {
 				deny(interuser, 'restart')
 			}
 		}
-		else if (commandName == 'modlog') {
+		else if (commandName === 'warn') {
 			const warnArray = require('./data/warns.json')
 			if (interaction.options.getSubcommand() === 'show') {
 				let fArray = { dataFound: [] }
@@ -576,20 +577,32 @@ client.on(`interactionCreate`, async interaction => {
 					(data) => {
 						if (data.userid === interaction.options.getUser("user").id) {
 							fArray.dataFound[fArray.dataFound.length] = data
-							const modTag = client
+							const modTag = await client
 								.users
 								.fetch(
-									fArray.dataFound[fArray.dataFound.length]
+									data
 										.modid
 										.toString()
 								)
-								.then(user => {
-									return user.tag
-								}
-								)
+							const time = new Date(data.datestamp)
+							fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag
+							fArray.dataFound[fArray.dataFound.length - 1].formatedDate = time
+								.toLocaleString('en-US', { timeZone: 'EST' })
 						}
 					}
 				)
+				const embed = new MessageEmbed()
+					.setTitle("Modlogs")
+					.setDescription(`Modlogs for ${interaction.options.getUser("user").tag}`)
+				fArray.dataFound.forEach((data, index) => {
+					embed
+						.addField(
+							`Modlog #${index + 1}`,
+							`Moderator: ${data.modTag}\nReason: ${data.reason}\nDate: ${data.formatedData}`,
+							true
+						)
+				})
+				interaction.reply({ embeds: [embed], ephemeral: true })
 			} else if (interaction.options.getSubcommand() === "add") {
 				warnArray.warns[warnArray.warns.length] = {
 					userid: interaction.options.getUser("user").id,
@@ -598,34 +611,41 @@ client.on(`interactionCreate`, async interaction => {
 					datestamp: Date.now(),
 					warnid: fUUID.v4()
 				}
+				fs.writeFile(
+					'./data/warns.json',
+					JSON.stringify(warnArray, 4),
+					function () { }
+				)
+				interaction.reply(
+					{
+						content: `added warning to ${interaction.options.getUser("user").tag}`,
+						ephemeral: true
+					}
+				)
 			} else if (interaction.options.getSubcommand() === "del") {
 				let fArray = { dataFound: [] }
 				warnArray.warns.forEach(
-					(data) => {
-						if (data.warnid === interaction.options.getUser("user").id) {
-							fArray.dataFound[fArray.dataFound.length] = data
-							const modTag = client
-								.users
-								.fetch(
-									fArray.dataFound[fArray.dataFound.length]
-										.modid
-										.toString()
-								)
-								.then(user => {
-									return user.tag
-								}
-								)
-								.then(user => {
-									fArray.dataFound[fArray.dataFound.length - 1].modname = user
-								}
-								)
+					(data, index) => {
+						if (data.warnid === interaction.options.getString("id")) {
+							warnArray.warns[index] = undefined
+							return;
 						}
 					}
 				)
-				const embed = {
-					color: cuf.randHex('#')
-				}
+				interaction.reply({ content: "Deleted", ephemeral: true })
 			} else if (interaction.options.getSubcommand() === "clear") {
+				warnArray.warns.forEach(
+					(data,index) => {
+						if (data.userid === interaction.options.getUser("user").id) {
+							warnArray.warns[index] = undefined
+						}
+					}
+				)
+				fs.writeFile(
+					'./data/warns.json',
+					JSON.stringify(warnArray, 4),
+					function () { }
+				)
 			} else {
 			}
 		}

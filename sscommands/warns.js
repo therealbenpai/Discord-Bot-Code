@@ -2,61 +2,55 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("modlog")
-        .setDescription("Modlog command system")
+        .setName("warn")
+        .setDescription("warn command system")
         .addSubcommand(subcommand =>
             subcommand
                 .setName("show")
-                .setDescription("Shows a user's modlog")
+                .setDescription("Shows a user's warnings")
                 .addUserOption(option =>
                     option
                         .setName("user")
-                        .setDescription("User to show the modlog of")
+                        .setDescription("User to show warnings from")
                         .setRequired(true)
                 )
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName("add")
-                .setDescription("Add a modlog to a user")
+                .setDescription("Add a warn to a user")
                 .addUserOption(option =>
                     option
                         .setName("user")
-                        .setDescription("User to add the modlog to")
+                        .setDescription("User to be warned")
                         .setRequired(true)
                 )
                 .addStringOption(option =>
                     option
                         .setName("reason")
-                        .setDescription("Reason for modlog")
+                        .setDescription("Reason for the warning")
                         .setRequired(true)
                 )
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName("del")
-                .setDescription("Deletes a modlog")
-                .addUserOption(option =>
-                    option
-                        .setName("user")
-                        .setDescription("User to have modlog deleted from")
-                        .setRequired(true)
-                )
+                .setDescription("Deletes a warn")
                 .addStringOption(option =>
                     option
                         .setName("id")
-                        .setDescription("id of the modlog to delete")
+                        .setDescription("id of the warn to delete")
                         .setRequired(true)
                 )
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName("clear")
-                .setDescription("Clear a user's modlog")
+                .setDescription("Clear a user's warnings")
                 .addUserOption(option =>
                     option
                         .setName("user")
-                        .setDescription("User to have the modlog cleared")
+                        .setDescription("User to clear warnings from")
                         .setRequired(true)
                 )
         )
