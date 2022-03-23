@@ -3,7 +3,7 @@ const { Client, Collection, Intents, guild, MessageEmbed, channel, User } = requ
 const { Builder, Embed } = require(`@discordjs/builders`);
 const wait = require(`util`).promisify(setTimeout);
 const StatusUpdater = require(`@tmware/status-rotate`)
-const uuid = require(`uuid`)
+const fUUID = require(`uuid`)
 const cmdUtil = require('node-cmd')
 
 //? Custom Utils
@@ -561,15 +561,72 @@ client.on(`interactionCreate`, async interaction => {
 		else if (commandName == 'restart') {
 			if (interuser.id === userid[0]) {
 				interaction.reply({ content: 'Restarting...', ephemeral: true })
-					.then(_ => client.destroy())
-					.then(_ => client.login(token))
-					.catch(
-						err => interaction.followUp({ content: `Restart failed due to: ${err}`, ephemeral: true })
-					)
-					.finally(_ => cLog.loga(interuser, 'restart'))
+				cLog.loga(interuser, 'restart')
+				process.exit()
 			}
 			else {
 				deny(interuser, 'restart')
+			}
+		}
+		else if (commandName == 'modlog') {
+			const warnArray = require('./data/warns.json')
+			if (interaction.options.getSubcommand() === 'show') {
+				let fArray = { dataFound: [] }
+				warnArray.warns.forEach(
+					(data) => {
+						if (data.userid === interaction.options.getUser("user").id) {
+							fArray.dataFound[fArray.dataFound.length] = data
+							const modTag = client
+								.users
+								.fetch(
+									fArray.dataFound[fArray.dataFound.length]
+										.modid
+										.toString()
+								)
+								.then(user => {
+									return user.tag
+								}
+								)
+						}
+					}
+				)
+			} else if (interaction.options.getSubcommand() === "add") {
+				warnArray.warns[warnArray.warns.length] = {
+					userid: interaction.options.getUser("user").id,
+					modid: interuser.id,
+					reason: interaction.options.getString("reason"),
+					datestamp: Date.now(),
+					warnid: fUUID.v4()
+				}
+			} else if (interaction.options.getSubcommand() === "del") {
+				let fArray = { dataFound: [] }
+				warnArray.warns.forEach(
+					(data) => {
+						if (data.warnid === interaction.options.getUser("user").id) {
+							fArray.dataFound[fArray.dataFound.length] = data
+							const modTag = client
+								.users
+								.fetch(
+									fArray.dataFound[fArray.dataFound.length]
+										.modid
+										.toString()
+								)
+								.then(user => {
+									return user.tag
+								}
+								)
+								.then(user => {
+									fArray.dataFound[fArray.dataFound.length - 1].modname = user
+								}
+								)
+						}
+					}
+				)
+				const embed = {
+					color: cuf.randHex('#')
+				}
+			} else if (interaction.options.getSubcommand() === "clear") {
+			} else {
 			}
 		}
 		else {

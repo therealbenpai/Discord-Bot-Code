@@ -32,7 +32,6 @@ for (const file of sscommandFiles) {
     const command = require(`./sscommands/${file}`);
     sscommands.push(command.data.toJSON());
 }
-
 const gcommandFiles = fs
     .readdirSync('./gcommands')
     .filter(file => file.endsWith('.js'));
