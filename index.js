@@ -51,29 +51,12 @@ Updater.start(1000 * seconds)
 client.on(`interactionCreate`, async interaction => {
 	if (!interaction.isCommand()) return
 
-	async function deny(user, cmd) {
+	function deny(user, cmd) {
 		cLog.logd(user, cmd)
-		await interaction.reply({
+		interaction.reply({
 			content: `<:mhdeny:936031945337479288> ${user.tag} You don't have the correct permissions to use ${cmd}`,
 			ephemeral: true
 		})
-	}
-
-	function staffCheck() {
-		if (interaction.member.roles.cache.has(roleid[0])) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function permCheck() {
-		const sc = staffCheck()
-		if (sc === true || interaction.user.id === userid[0] || interaction.user.id === userid[1]) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	//? Quick Varibles
@@ -94,8 +77,24 @@ client.on(`interactionCreate`, async interaction => {
 	//? Command name colector
 	const { commandName } = interaction;
 
+	function staffCheck() {
+		if (interaction.member.roles.cache.has(roleid[0])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function permCheck() {
+		const sc = staffCheck()
+		if (sc === true || interaction.user.id === userid[0] || interaction.user.id === userid[1]) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	//? Command Reponses
-	try {
 		if (commandName === `ping`) {
 			await interaction.reply(`Pong!`);
 		}
@@ -552,7 +551,7 @@ client.on(`interactionCreate`, async interaction => {
 		// }
 		else if (commandName == 'restart') {
 			if (interuser.id === userid[0]) {
-				interaction.reply({ content: 'Restarting...', ephemeral: true })
+				await interaction.reply({ content: 'Restarting...', ephemeral: true })
 				cLog.loga(interuser, 'restart')
 				process.exit()
 			}
@@ -562,7 +561,7 @@ client.on(`interactionCreate`, async interaction => {
 		}
 		else if (commandName === 'warn') {
 			const pc = permCheck()
-			if (pc == false) { deny(interuser, 'warn'); }
+			if (pc === false) { deny(interuser, 'warn'); }
 			else {
 				const runscript = function () {
 					const warnArray = require('./data/warns.json')
@@ -650,7 +649,4 @@ client.on(`interactionCreate`, async interaction => {
 			console.error("A user has triggered this to run, but a valid command option wasn't found")
 			throw new Error("A user has triggered this to run, but a valid command option wasn't found")
 		}
-	} catch (err) {
-		cLog.logerr(err)
-	}
 });
