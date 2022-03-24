@@ -2,4 +2,4 @@ discord.js
 eslint
 util
 @tmware/status-rotate
-node-cmd
+pm2

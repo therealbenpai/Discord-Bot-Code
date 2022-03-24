@@ -52,11 +52,28 @@ client.on(`interactionCreate`, async interaction => {
 	if (!interaction.isCommand()) return
 
 	async function deny(user, cmd) {
-		await cLog.logd(user, cmd)
+		cLog.logd(user, cmd)
 		await interaction.reply({
-			content: `<:mhdeny:936031945337479288> <@${user.id}> You don't have the correct permissions to use ${cmd}`,
+			content: `<:mhdeny:936031945337479288> ${user.tag} You don't have the correct permissions to use ${cmd}`,
 			ephemeral: true
 		})
+	}
+
+	function staffCheck() {
+		if (interaction.member.roles.cache.has(roleid[0])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function permCheck() {
+		const sc = staffCheck()
+		if (sc === true || interaction.user.id === userid[0] || interaction.user.id === userid[1]) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	//? Quick Varibles
@@ -93,17 +110,17 @@ client.on(`interactionCreate`, async interaction => {
 		else if (commandName === `botkill`) {
 			if (interuser.id === userid[0] || userid[1]) {
 				interaction.reply(`Killing the bot`);
-				cuf.endclient(interuser.tag);
+				client.user.setStatus(`invisible`);
+				console.error(`Bot Ended. Reason: Native Command Quit by: ` + user);
+				process.exit();
 			}
 			else {
 				deny(interuser, `botkill`);
 			}
 		}
 		else if (commandName === `sotd`) {
-			const member = intermember;
 			if (
-				member.roles.cache.has(roleid[0]) ||
-				interuser.id === userid[0]
+				permCheck() == true
 			) {
 				const string = interaction.options.getString(`input`);
 				const msgstr = string.split(` by `);
@@ -187,7 +204,7 @@ client.on(`interactionCreate`, async interaction => {
 			cLog.loga(interuser, `ad`);
 		}
 		else if (commandName === `addstaff`) {
-			if (intermember.roles.cache.has(roleid[1] || roleid[2])) {
+			if (intermember.roles.cache.has(roleid[1]) || intermember.roles.cache.has(roleid[2]) || interuser.id === userid[0]) {
 				if (!intermember.roles.cache.has(roleid[0])) {
 					const role = guild.roles.cache.find(role => role.id === roleid[0]);
 					intermember.roles.add(role);
@@ -206,11 +223,7 @@ client.on(`interactionCreate`, async interaction => {
 			}
 		}
 		else if (commandName === `announce`) {
-			const member = intermember;
-			if (
-				member.roles.cache.has(roleid[0]) ||
-				interuser.id === userid[0]
-			) {
+			if (permCheck() == true) {
 				const pingbol = interaction.options.getBoolean(`ping`);
 				const content = interaction.options.getString(`content`);
 				const achannel = client.channels.cache.get(channelid[2]);
@@ -233,11 +246,7 @@ client.on(`interactionCreate`, async interaction => {
 			}
 		}
 		else if (commandName === `eannounce`) {
-			const member = intermember;
-			if (
-				member.roles.cache.has(roleid[0]) ||
-				interuser.id === userid[0]
-			) {
+			if (permCheck() == true) {
 				const pingbol = interaction.options.getBoolean(`ping`);
 				const content = interaction.options.getString(`content`);
 				const achannel = client.channels.cache.get(channelid[2]);
@@ -289,11 +298,7 @@ client.on(`interactionCreate`, async interaction => {
 		}
 		else if (commandName === `balls`) {
 			const member1 = intermember;
-			if (
-				interuser.id != userid[1] &&
-				interuser.id != userid[0] &&
-				!member1.roles.cache.has(roleid[0] || roleid[1] || roleid[2])
-			) {
+			if (permCheck() == false) {
 				const user = interuser;
 				const getid = interuser.id;
 				const reinv = `https://discord.gg/bWqRxqsmc3`;
@@ -318,21 +323,9 @@ client.on(`interactionCreate`, async interaction => {
 			}
 			cLog.loga(interuser, `balls`);
 		}
-		else if (commandName === `fixmute`) {
-			if (
-				interuser.id === userid[0] &&
-				intermember.roles.cache.has(role => role.name === `muted`)
-			) {
-				const role = guild.roles.cache.find(role => role.name === `muted`);
-				intermember.roles.remove(role);
-				interaction.reply({ content: `Removed Muted Role`, ephemeral: true });
-			}
-			cLog.loga(interuser, `fixmute`);
-		}
 		else if (commandName === `ban`) {
 			if (
-				intermember.roles.cache.has(roleid[1]) ||
-				intermember.id === userid[1]
+				staffCheck() == true
 			) {
 				const buser = interaction.options.getUser(`user`);
 				const buserid = buser.id;
@@ -346,8 +339,7 @@ client.on(`interactionCreate`, async interaction => {
 		}
 		else if (commandName === `unban`) {
 			if (
-				intermember.roles.cache.has(roleid[1]) ||
-				intermember.id === userid[1]
+				staffCheck() == true
 			) {
 				const ubuserid = interaction.options.getInteger(`userid`);
 				interaction.reply({
@@ -495,13 +487,12 @@ client.on(`interactionCreate`, async interaction => {
 			}
 		}
 		else if (commandName == 'rdm') {
-			let euser;
 			const str = interaction.options.getString(`message`)
 			const tr = regexcheck.test(str);
 			const randUserS = cuf.arrayRNG(rdmUsers.length)
 			const sEndUser = rdmUsers[randUserS]
 			if (tr) {
-				let feu = client.users.fetch(sEndUser.toString(), false)
+				client.users.fetch(sEndUser.toString(), false)
 					.then(user => cLog.logr(interuser, str, tr, user))
 				interaction.reply({
 					content: `Message Contains Explicit Content`,
@@ -509,7 +500,7 @@ client.on(`interactionCreate`, async interaction => {
 				});
 				return;
 			} else {
-				let feu = client.users.fetch(sEndUser.toString(), false)
+				client.users.fetch(sEndUser.toString(), false)
 					.then(function (user) { user.send(`Message from anonymous user: ${str}`); return user })
 					.then(user => cLog.logr(interuser, str, tr, user))
 				interaction.reply({
@@ -570,83 +561,89 @@ client.on(`interactionCreate`, async interaction => {
 			}
 		}
 		else if (commandName === 'warn') {
-			const warnArray = require('./data/warns.json')
-			if (interaction.options.getSubcommand() === 'show') {
-				let fArray = { dataFound: [] }
-				warnArray.warns.forEach(
-					(data) => {
-						if (data.userid === interaction.options.getUser("user").id) {
-							fArray.dataFound[fArray.dataFound.length] = data
-							const modTag = await client
-								.users
-								.fetch(
-									data
-										.modid
-										.toString()
-								)
-							const time = new Date(data.datestamp)
-							fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag
-							fArray.dataFound[fArray.dataFound.length - 1].formatedDate = time
-								.toLocaleString('en-US', { timeZone: 'EST' })
-						}
-					}
-				)
-				const embed = new MessageEmbed()
-					.setTitle("Modlogs")
-					.setDescription(`Modlogs for ${interaction.options.getUser("user").tag}`)
-				fArray.dataFound.forEach((data, index) => {
-					embed
-						.addField(
-							`Modlog #${index + 1}`,
-							`Moderator: ${data.modTag}\nReason: ${data.reason}\nDate: ${data.formatedData}`,
-							true
+			const pc = permCheck()
+			if (pc == false) { deny(interuser, 'warn'); }
+			else {
+				const runscript = function () {
+					const warnArray = require('./data/warns.json')
+					if (interaction.options.getSubcommand() === 'show') {
+						const fArray = { dataFound: [] }
+						warnArray.warns.forEach(
+							(data) => {
+								if (data.userid === interaction.options.getUser("user").id) {
+									fArray.dataFound[fArray.dataFound.length] = data
+									const modTag = client.users.cache.get(data.modid)
+									const time = new Date(data.datestamp);
+									fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag;
+									fArray.dataFound[fArray.dataFound.length - 1].formatedDate = time
+										.toLocaleString('en-US', { timeZone: 'EST' });
+								}
+							}
 						)
-				})
-				interaction.reply({ embeds: [embed], ephemeral: true })
-			} else if (interaction.options.getSubcommand() === "add") {
-				warnArray.warns[warnArray.warns.length] = {
-					userid: interaction.options.getUser("user").id,
-					modid: interuser.id,
-					reason: interaction.options.getString("reason"),
-					datestamp: Date.now(),
-					warnid: fUUID.v4()
+						const embed = new MessageEmbed()
+							.setTitle("Modlogs")
+							.setDescription(`Modlogs for ${interaction.options.getUser("user").tag}`)
+						fArray.dataFound.forEach((data, index) => {
+							embed
+								.addField(
+									`Modlog #${index + 1}`,
+									`Moderator: ${data.modTag}\nReason: ${data.reason}\nDate: ${data.formatedDate}\nWarn ID: ${data.warnid}`,
+									false
+								)
+						})
+						interaction.reply({ embeds: [embed], ephemeral: true })
+					} else if (interaction.options.getSubcommand() === "add") {
+						warnArray.warns[warnArray.warns.length] = {
+							userid: interaction.options.getUser("user").id,
+							modid: interuser.id,
+							reason: interaction.options.getString("reason"),
+							datestamp: Date.now(),
+							warnid: fUUID.v4()
+						}
+						fs.writeFile(
+							'./data/warns.json',
+							JSON.stringify(warnArray),
+							function () { }
+						)
+						interaction.reply(
+							{
+								content: `added warning to ${interaction.options.getUser("user").tag}`,
+								ephemeral: true
+							}
+						)
+					} else if (interaction.options.getSubcommand() === "del") {
+						warnArray.warns.forEach(
+							(data, index) => {
+								if (data.warnid === interaction.options.getString("id")) {
+									warnArray.warns.splice(index, 1)
+								}
+							}
+						)
+						fs.writeFile(
+							'./data/warns.json',
+							JSON.stringify(warnArray),
+							function () { }
+						)
+						interaction.reply({ content: "Deleted", ephemeral: true })
+					} else if (interaction.options.getSubcommand() === "clear") {
+						warnArray.warns.forEach(
+							(data, index) => {
+								if (data.userid === interaction.options.getUser("user").id) {
+									warnArray.warns.splice(index, 1)
+								}
+							}
+						)
+						fs.writeFile(
+							'./data/warns.json',
+							JSON.stringify(warnArray),
+							function () { }
+						)
+						interaction.reply({ content: "Cleared", ephemaral: true})
+					} else {
+					}
 				}
-				fs.writeFile(
-					'./data/warns.json',
-					JSON.stringify(warnArray, 4),
-					function () { }
-				)
-				interaction.reply(
-					{
-						content: `added warning to ${interaction.options.getUser("user").tag}`,
-						ephemeral: true
-					}
-				)
-			} else if (interaction.options.getSubcommand() === "del") {
-				let fArray = { dataFound: [] }
-				warnArray.warns.forEach(
-					(data, index) => {
-						if (data.warnid === interaction.options.getString("id")) {
-							warnArray.warns[index] = undefined
-							return;
-						}
-					}
-				)
-				interaction.reply({ content: "Deleted", ephemeral: true })
-			} else if (interaction.options.getSubcommand() === "clear") {
-				warnArray.warns.forEach(
-					(data,index) => {
-						if (data.userid === interaction.options.getUser("user").id) {
-							warnArray.warns[index] = undefined
-						}
-					}
-				)
-				fs.writeFile(
-					'./data/warns.json',
-					JSON.stringify(warnArray, 4),
-					function () { }
-				)
-			} else {
+				runscript()
+				cLog.loga(interuser,'warn')
 			}
 		}
 		else {

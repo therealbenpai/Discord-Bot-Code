@@ -64,11 +64,6 @@ function randHex(prefix) {
 	const hex = Math.floor(Math.random() * Math.pow(16, 6)).toString(16)
 	return `${prefix}${hex}`
 }
-function endclient(user) {
-	client.user.setStatus(`invisible`);
-	console.error(`Bot Ended. Reason: Native Command Quit by: ` + user);
-	process.exit();
-}
 function rtbSpect() {
 	const spot = arrayRNG(colorp.colorpc.length)
 	return String(colorp.colorpc[spot])
@@ -81,6 +76,5 @@ exports.getFullDate = getFullDate
 exports.randHex = randHex
 exports.arrayRNG = arrayRNG
 exports.rtbSpect = rtbSpect
-exports.endclient = endclient
 exports.rng1 = rng1
 exports.rng2 = rng2
