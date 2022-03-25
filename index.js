@@ -90,7 +90,8 @@ client.on(`interactionCreate`, async interaction => {
 		}
 	}
 
-	//? Command Reponses
+	try {
+			//? Command Reponses
 	if (commandName === `ping`) {
 		await interaction.reply(`Pong!`);
 	}
@@ -640,6 +641,9 @@ client.on(`interactionCreate`, async interaction => {
 	else {
 		console.error("A user has triggered this to run, but a valid command option wasn't found")
 		throw new Error("A user has triggered this to run, but a valid command option wasn't found")
+	}
+	} catch (err) {
+		cLog.logerr(err)
 	}
 });
 
