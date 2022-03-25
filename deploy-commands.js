@@ -20,9 +20,11 @@ module.exports = {
     )
 }
 */
-const gcommands = [].map(gcommand => gcommand.toJSON())
+const gcommands = []
+gcommands.map(command => command.toJSON())
 
-const sscommands = [].map(command => command.toJSON());
+const sscommands = []
+sscommands.map(command => command.toJSON());
 
 const sscommandFiles = fs
     .readdirSync('./sscommands')
