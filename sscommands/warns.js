@@ -14,6 +14,12 @@ module.exports = {
                         .setDescription("User to show warnings from")
                         .setRequired(true)
                 )
+                .addBooleanOption(option =>
+                    option
+                        .setName("public")
+                        .setDescription("Send details publicly")
+                        .setRequired(true)
+                )
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -31,6 +37,12 @@ module.exports = {
                         .setDescription("Reason for the warning")
                         .setRequired(true)
                 )
+                .addBooleanOption(option =>
+                    option
+                        .setName("public")
+                        .setDescription("Send details publicly")
+                        .setRequired(true)
+                )
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -42,6 +54,12 @@ module.exports = {
                         .setDescription("id of the warn to delete")
                         .setRequired(true)
                 )
+                .addBooleanOption(option =>
+                    option
+                        .setName("public")
+                        .setDescription("Send details publicly")
+                        .setRequired(true)
+                )
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -51,6 +69,12 @@ module.exports = {
                     option
                         .setName("user")
                         .setDescription("User to clear warnings from")
+                        .setRequired(true)
+                )
+                .addBooleanOption(option =>
+                    option
+                        .setName("public")
+                        .setDescription("Send details publicly")
                         .setRequired(true)
                 )
         )
