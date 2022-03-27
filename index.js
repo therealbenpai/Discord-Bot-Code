@@ -201,7 +201,7 @@ client.on(`interactionCreate`, async interaction => {
 		else if (commandName === `addstaff`) {
 			if (intermember.roles.cache.has(roleid[1]) || intermember.roles.cache.has(roleid[2]) || interuser.id === userid[0]) {
 				if (!intermember.roles.cache.has(roleid[0])) {
-					const role = guild.roles.cache.find(role => role.id === roleid[0]);
+					const role = interaction.guild.roles.cache.find(role => role.id === roleid[0]);
 					intermember.roles.add(role);
 					interaction.reply({ content: `<:mhallow:936031945027096586> Added Staff Role`, ephemeral: true });
 					cLog.loga(interuser, `addstaff`);
@@ -594,7 +594,7 @@ client.on(`interactionCreate`, async interaction => {
 					warnArray.warns.forEach(
 						(data, index) => {
 							if (data.userid === interaction.options.getUser("user").id) {
-								warnArray.warns.splice(index, 1)
+								warnArray.warns.splice(index)
 							}
 						}
 					)
@@ -603,7 +603,7 @@ client.on(`interactionCreate`, async interaction => {
 						JSON.stringify(warnArray),
 						function () { }
 					)
-					await interaction.reply({ content: "Cleared", ephemaral: ptag })
+					await interaction.reply({ content: `Cleared ${interaction.options.getUser("user").tag}`, ephemaral: ptag })
 				} else {
 
 				}
@@ -672,7 +672,7 @@ client.on(`interactionCreate`, async interaction => {
 						}
 					)
 				}
-				else if (interaction.options.getSubcommand() === 'del') {
+				else if (interaction.options.getSubcommand() === 'delete') {
 					notesArray.notes.forEach(
 						(data, index) => {
 							if (data.userid === interaction.options.getUser("user").id && data.moderatorid === interaction.user.id) {
