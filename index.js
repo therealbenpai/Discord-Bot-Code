@@ -242,7 +242,7 @@ client.on(`interactionCreate`, async interaction => {
 		}
 		else if (commandName === `eannounce`) {
 			if (permCheck() == true) {
-				const pingbol = interaction.options.getBoolean(`ping`);
+				const pingbol = interaction.options.getBoolean(`ping`);	
 				const content = interaction.options.getString(`content`);
 				const achannel = client.channels.cache.get(channelid[2]);
 				let embed = {
