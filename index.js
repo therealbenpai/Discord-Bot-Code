@@ -783,6 +783,12 @@ client.on(`interactionCreate`, async interaction => {
 			}
 			cLog.loga(interuser,'qrule')
 		} else {
+			interaction.reply(
+				{
+					content: `This command hasn't been implemented yet. Please wait for <@${userid[0]}> to add it.`,
+					ephemeral: true
+				}
+				)
 			console.error("A user has triggered this to run, but a valid command option wasn't found")
 			throw new Error("A user has triggered this to run, but a valid command option wasn't found")
 		}
