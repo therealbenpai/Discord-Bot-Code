@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('eannounce')
         .setDescription('Make an announcement, but in an embed')
+        .setDefaultPermission(false)
         .addStringOption(option =>
             option
                 .setName('content')

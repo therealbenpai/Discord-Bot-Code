@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('innerval')
         .setDescription('Sets the status innerval')
+        .setDefaultPermission(false)
         .addIntegerOption(option =>
             option
                 .setName('time')

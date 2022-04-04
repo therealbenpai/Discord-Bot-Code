@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('status')
         .setDescription('Add a status to the rotation')
+        .setDefaultPermission(false)
         .addStringOption(option =>
             option
                 .setName('type')

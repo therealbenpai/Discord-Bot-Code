@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("warn")
         .setDescription("warn command system")
+        .setDefaultPermission(false)
         .addSubcommand(subcommand =>
             subcommand
                 .setName("show")

@@ -4,6 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('timeout')
 		.setDescription('Puts a user into timeout')
+		.setDefaultPermission(false)
 		.addUserOption(option =>
 			option
 				.setName("user")

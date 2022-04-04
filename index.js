@@ -40,6 +40,68 @@ client.once(`ready`, () => {
 	console.log(`The bot has been properly started.\nStart Time: ${startTime}\nSession Code: ${sessionUUID}`);
 	cLog.logs()
 	Updater.updateStatus()
+	async function cmdPerms() {
+		const mainCmd = (await client.guilds.fetch("739508544080183316")).commands
+		const cmd2 = await mainCmd.fetch("954768997721710625") // announce
+		const cmd3 = await mainCmd.fetch("954768997721710627") // botkill
+		const cmd4 = await mainCmd.fetch("954768998162128947") // eannounce
+		const cmd5 = await mainCmd.fetch("954768998220836885") // sotd
+		const cmd6 = await mainCmd.fetch("954768998220836886") // status
+		const cmd7 = await mainCmd.fetch("954768998220836887") // innerval
+		const cmd8 = await mainCmd.fetch("956338283061837824") // ban
+		const cmd9 = await mainCmd.fetch("956338283061837825") // kick
+		const cmd10 = await mainCmd.fetch("956338283061837826") // modnotes
+		const cmd11 = await mainCmd.fetch("956338283061837828") // timeout
+		const cmd12 = await mainCmd.fetch("956338283061837829") // unban
+		const cmd13 = await mainCmd.fetch("956338283061837830") // warn
+		//! Staff and Me
+		const permtype1 = [
+			{
+				id: "783855260300869632",
+				type: "USER",
+				permission: true,
+			},
+			{
+				id: "801559407350775819",
+				type: "ROLE",
+				permission: true,
+			},
+		]
+		//! Just Me and Sophie
+		const permtype2 = [
+			{
+				id: "783855260300869632",
+				type: "USER",
+				permission: true,
+			},
+			{
+				id: "730887743361777685",
+				type: "USER",
+				permission: true,
+			},
+		]
+		//! Just Me
+		const permtype3 = [
+			{
+				id: "783855260300869632",
+				type: "USER",
+				permission: true,
+			},
+		]
+		await cmd2.permissions.set({ permissions: permtype1 })
+		await cmd3.permissions.set({ permissions: permtype2 })
+		await cmd4.permissions.set({ permissions: permtype1 })
+		await cmd5.permissions.set({ permissions: permtype1 })
+		await cmd6.permissions.set({ permissions: permtype3 })
+		await cmd7.permissions.set({ permissions: permtype3 })
+		await cmd8.permissions.set({ permissions: permtype1 })
+		await cmd9.permissions.set({ permissions: permtype1 })
+		await cmd10.permissions.set({ permissions: permtype1 })
+		await cmd11.permissions.set({ permissions: permtype1 })
+		await cmd12.permissions.set({ permissions: permtype1 })
+		await cmd13.permissions.set({ permissions: permtype1 })
+	}
+	cmdPerms()
 });
 
 //? Command Handleing
@@ -103,73 +165,62 @@ client.on(`interactionCreate`, async interaction => {
 			await interaction.reply(`User info.`);
 		}
 		else if (commandName === `botkill`) {
-			if (interuser.id === userid[0] || userid[1]) {
-				await interaction.reply(`Killing the bot`);
-				client.user.setStatus(`invisible`);
-				console.error(`Bot Ended. Reason: Native Command Quit by: ` + interaction.user.tag);
-				process.exit();
-			}
-			else {
-				deny(interuser, `botkill`);
-			}
+			await interaction.reply(`Killing the bot`);
+			client.user.setStatus(`invisible`);
+			console.error(`Bot Ended. Reason: Native Command Quit by: ` + interaction.user.tag);
+			process.exit();
 		}
 		else if (commandName === `sotd`) {
-			const check = permCheck()
-			if (check == true) {
-				const string = interaction.options.getString(`input`);
-				const msgstr = string.split(` by `);
-				const link = interaction.options.getString(`link`);
-				const schannel = client.channels.cache.get(channelid[0]);
-				let embed;
-				if (link == undefined || null) {
-					embed = {
-						color: cuf.rtbSpect(),
-						author: {
-							name: interuser.tag,
-							icon_url: interuser.displayAvatarURL({ dynamic: true })
-						},
-						title: `Song Of The Day`,
-						description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
-						timestamp: new Date(),
-						footer: {
-							text: `Choosen by: ` + interuser.tag,
-							icon_url: interuser.displayAvatarURL({ dynamic: true })
-						}
+			const string = interaction.options.getString(`input`);
+			const msgstr = string.split(` by `);
+			const link = interaction.options.getString(`link`);
+			const schannel = client.channels.cache.get(channelid[0]);
+			let embed;
+			if (link == undefined || null) {
+				embed = {
+					color: cuf.rtbSpect(),
+					author: {
+						name: interuser.tag,
+						icon_url: interuser.displayAvatarURL({ dynamic: true })
+					},
+					title: `Song Of The Day`,
+					description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+					timestamp: new Date(),
+					footer: {
+						text: `Choosen by: ` + interuser.tag,
+						icon_url: interuser.displayAvatarURL({ dynamic: true })
 					}
 				}
-				else {
-					embed = {
-						color: cuf.rtbSpect(),
-						author: {
-							name: interuser.tag,
-							icon_url: interuser.displayAvatarURL({ dynamic: true })
-						},
-						title: `Song Of The Day`,
-						description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
-						fields: [
-							{
-								name: 'Link:',
-								value: `[Song Link](${link})`,
-								inline: true
-							}
-						],
-						timestamp: new Date(),
-						footer: {
-							text: `Choosen by: ` + interuser.tag,
-							icon_url: interuser.displayAvatarURL({ dynamic: true })
-						}
-					}
-				}
-				cLog.loga(interuser, `sotd`);
-				schannel.send({ content: `<@&771928489166897202>`, embeds: [embed] });
-				await interaction.reply({
-					content: `<:mhallow:936031945027096586> Sent the SOTD embed`,
-					ephemeral: true
-				});
 			}
 			else {
-				deny(interuser, `sotd`);
+				embed = {
+					color: cuf.rtbSpect(),
+					author: {
+						name: interuser.tag,
+						icon_url: interuser.displayAvatarURL({ dynamic: true })
+					},
+					title: `Song Of The Day`,
+					description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+					fields: [
+						{
+							name: 'Link:',
+							value: `[Song Link](${link})`,
+							inline: true
+						}
+					],
+					timestamp: new Date(),
+					footer: {
+						text: `Choosen by: ` + interuser.tag,
+						icon_url: interuser.displayAvatarURL({ dynamic: true })
+					}
+				}
 			}
+			cLog.loga(interuser, `sotd`);
+			schannel.send({ content: `<@&771928489166897202>`, embeds: [embed] });
+			await interaction.reply({
+				content: `<:mhallow:936031945027096586> Sent the SOTD embed`,
+				ephemeral: true
+			});
 		}
 		else if (commandName === `newchannel`) {
 			await interaction.reply(`nope not in the mood`);
@@ -217,56 +268,46 @@ client.on(`interactionCreate`, async interaction => {
 			}
 		}
 		else if (commandName === `announce`) {
-			if (permCheck() == true) {
-				const pingbol = interaction.options.getBoolean(`ping`);
-				const content = interaction.options.getString(`content`);
-				const achannel = client.channels.cache.get(channelid[2]);
-				if (pingbol === true) {
-					achannel.send(
-						`<@&777654579361349682>\n` +
-						content +
-						`\n\n**Sent by:** ` +
-						interuser.tag
-					);
-				}
-				else {
-					achannel.send(content + `\n\n**Sent by:** ` + interuser.tag);
-				}
-				interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
-				cLog.loga(interuser, `announce`);
+			const pingbol = interaction.options.getBoolean(`ping`);
+			const content = interaction.options.getString(`content`);
+			const achannel = client.channels.cache.get(channelid[2]);
+			if (pingbol === true) {
+				achannel.send(
+					`<@&777654579361349682>\n` +
+					content +
+					`\n\n**Sent by:** ` +
+					interuser.tag
+				);
 			}
 			else {
-				deny(interuser, `announce`);
+				achannel.send(content + `\n\n**Sent by:** ` + interuser.tag);
 			}
+			interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
+			cLog.loga(interuser, `announce`);
 		}
 		else if (commandName === `eannounce`) {
-			if (permCheck() == true) {
-				const pingbol = interaction.options.getBoolean(`ping`);	
-				const content = interaction.options.getString(`content`);
-				const achannel = client.channels.cache.get(channelid[2]);
-				let embed = {
-					color: cuf.randHex('#'),
-					title: 'Announcement',
-					author: {
-						name: interuser.tag,
-						icon_url: interuser.displayAvatarURL({ dynamic: true })
-					},
-					description: content,
-					timestamp: new Date(),
-					footer: {
-						text: 'Annoumcement Pog'
-					}
+			const pingbol = interaction.options.getBoolean(`ping`);
+			const content = interaction.options.getString(`content`);
+			const achannel = client.channels.cache.get(channelid[2]);
+			let embed = {
+				color: cuf.randHex('#'),
+				title: 'Announcement',
+				author: {
+					name: interuser.tag,
+					icon_url: interuser.displayAvatarURL({ dynamic: true })
+				},
+				description: content,
+				timestamp: new Date(),
+				footer: {
+					text: 'Annoumcement Pog'
 				}
-				if (pingbol === true) {
-					achannel.send(`<@&777654579361349682>`);
-				}
-				achannel.send({ embeds: [embed] })
-				interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
-				cLog.loga(interuser, `eannounce`);
 			}
-			else {
-				deny(interuser, `eannounce`);
+			if (pingbol === true) {
+				achannel.send(`<@&777654579361349682>`);
 			}
+			achannel.send({ embeds: [embed] })
+			interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
+			cLog.loga(interuser, `eannounce`);
 		}
 		else if (commandName === `about`) {
 			const bol = interaction.options.getBoolean(`dm`);
@@ -410,43 +451,35 @@ client.on(`interactionCreate`, async interaction => {
 			cLog.loga(interuser, `tod`)
 		}
 		else if (commandName == 'status') {
-			if (interuser.id === userid[0] || intermember.roles.cache.has(roleid[1])) {
-				let ctype = interaction.options.getString("type")
-				let cmessage = interaction.options.getString("status")
-				Updater.addStatus(
-					{
-						type: ctype,
-						name: cmessage
-					}
-				)
-				cLog.loga(interuser, 'status')
+			let ctype = interaction.options.getString("type")
+			let cmessage = interaction.options.getString("status")
+			Updater.addStatus(
+				{
+					type: ctype,
+					name: cmessage
+				}
+			)
+			cLog.loga(interuser, 'status')
+			interaction.reply({
+				content: `Status Added`,
+				ephemeral: true
+			})
+		}
+		else if (commandName == 'innerval') {
+			if (interaction.options.getInteger('time') <= 30) {
 				interaction.reply({
-					content: `Status Added`,
+					content: `Time needs to be greater than 30`,
 					ephemeral: true
 				})
 			} else {
-				deny(interuser, 'status')
-			}
-		}
-		else if (commandName == 'innerval') {
-			if (interuser.id === userid[0]) {
-				if (interaction.options.getInteger('time') <= 30) {
-					interaction.reply({
-						content: `Time needs to be greater than 30`,
-						ephemeral: true
-					})
-				} else {
-					seconds = interaction.options.getInteger('time')
-					Updater.stop()
-					Updater.start(1000 * seconds)
-					interaction.reply({
-						content: `Time has been updated to ${seconds}`,
-						ephemeral: true
-					})
-					console.log(`Status clock timer has been updated to ${seconds}s`)
-				}
-			} else {
-				cLog.logd(interuser, 'innerval')
+				seconds = interaction.options.getInteger('time')
+				Updater.stop()
+				Updater.start(1000 * seconds)
+				interaction.reply({
+					content: `Time has been updated to ${seconds}`,
+					ephemeral: true
+				})
+				console.log(`Status clock timer has been updated to ${seconds}s`)
 			}
 		}
 		else if (commandName == 'rdm') {
@@ -524,231 +557,207 @@ client.on(`interactionCreate`, async interaction => {
 			}
 		}
 		else if (commandName === 'warn') {
-			const pc = permCheck()
-			if (pc === false) { deny(interuser, 'warn'); }
-			else {
-				let ptag;
-				if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
-				const warnArray = require('./data/warns.json')
-				if (interaction.options.getSubcommand() === 'show') {
-					const fArray = { dataFound: [] }
-					warnArray.warns.forEach(
-						(data) => {
-							if (data.userid === interaction.options.getUser("user").id) {
-								fArray.dataFound[fArray.dataFound.length] = data
-								const modTag = client.users.cache.get(data.modid)
-								const time = new Date(data.datestamp);
-								fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag;
-								fArray.dataFound[fArray.dataFound.length - 1].formatedDate = time
-									.toLocaleString('en-US', { timeZone: 'EST' });
-							}
+			let ptag;
+			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const warnArray = require('./data/warns.json')
+			if (interaction.options.getSubcommand() === 'show') {
+				const fArray = { dataFound: [] }
+				warnArray.warns.forEach(
+					(data) => {
+						if (data.userid === interaction.options.getUser("user").id) {
+							fArray.dataFound[fArray.dataFound.length] = data
+							const modTag = client.users.cache.get(data.modid)
+							const time = new Date(data.datestamp);
+							fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag;
+							fArray.dataFound[fArray.dataFound.length - 1].formatedDate = time
+								.toLocaleString('en-US', { timeZone: 'EST' });
 						}
-					)
-					const embed = new MessageEmbed()
-						.setTitle("Modlogs")
-						.setDescription(`Modlogs for ${interaction.options.getUser("user").tag}`)
-					fArray.dataFound.forEach((data, index) => {
-						embed
-							.addField(
-								`Modlog #${index + 1}`,
-								`Moderator: ${data.modTag}\nReason: ${data.reason}\nDate: ${data.formatedDate}\nWarn ID: ${data.warnid}`,
-								false
-							)
-					})
-					await interaction.reply({ embeds: [embed], ephemeral: ptag })
-				} else if (interaction.options.getSubcommand() === "add") {
-					warnArray.warns[warnArray.warns.length] = {
-						userid: interaction.options.getUser("user").id,
-						modid: interuser.id,
-						reason: interaction.options.getString("reason"),
-						datestamp: Date.now(),
-						warnid: fUUID.v4()
 					}
-					fs.writeFile(
-						'./data/warns.json',
-						JSON.stringify(warnArray),
-						function () { }
-					)
-					await interaction.reply(
-						{
-							content: `added warning to ${interaction.options.getUser("user").tag}`,
-							ephemeral: ptag
+				)
+				const embed = new MessageEmbed()
+					.setTitle("Modlogs")
+					.setDescription(`Modlogs for ${interaction.options.getUser("user").tag}`)
+				fArray.dataFound.forEach((data, index) => {
+					embed
+						.addField(
+							`Modlog #${index + 1}`,
+							`Moderator: ${data.modTag}\nReason: ${data.reason}\nDate: ${data.formatedDate}\nWarn ID: ${data.warnid}`,
+							false
+						)
+				})
+				await interaction.reply({ embeds: [embed], ephemeral: ptag })
+			} else if (interaction.options.getSubcommand() === "add") {
+				warnArray.warns[warnArray.warns.length] = {
+					userid: interaction.options.getUser("user").id,
+					modid: interuser.id,
+					reason: interaction.options.getString("reason"),
+					datestamp: Date.now(),
+					warnid: fUUID.v4()
+				}
+				fs.writeFile(
+					'./data/warns.json',
+					JSON.stringify(warnArray),
+					function () { }
+				)
+				await interaction.reply(
+					{
+						content: `added warning to ${interaction.options.getUser("user").tag}`,
+						ephemeral: ptag
+					}
+				)
+			} else if (interaction.options.getSubcommand() === "del") {
+				warnArray.warns.forEach(
+					(data, index) => {
+						if (data.warnid === interaction.options.getString("id")) {
+							warnArray.warns.splice(index, 1)
 						}
-					)
-				} else if (interaction.options.getSubcommand() === "del") {
-					warnArray.warns.forEach(
-						(data, index) => {
-							if (data.warnid === interaction.options.getString("id")) {
-								warnArray.warns.splice(index, 1)
-							}
+					}
+				)
+				fs.writeFile(
+					'./data/warns.json',
+					JSON.stringify(warnArray),
+					function () { }
+				)
+				await interaction.reply({ content: "Deleted", ephemeral: ptag })
+			} else if (interaction.options.getSubcommand() === "clear") {
+				warnArray.warns.forEach(
+					(data, index) => {
+						if (data.userid === interaction.options.getUser("user").id) {
+							warnArray.warns.splice(index)
 						}
-					)
-					fs.writeFile(
-						'./data/warns.json',
-						JSON.stringify(warnArray),
-						function () { }
-					)
-					await interaction.reply({ content: "Deleted", ephemeral: ptag })
-				} else if (interaction.options.getSubcommand() === "clear") {
-					warnArray.warns.forEach(
-						(data, index) => {
-							if (data.userid === interaction.options.getUser("user").id) {
-								warnArray.warns.splice(index)
-							}
-						}
-					)
-					fs.writeFile(
-						'./data/warns.json',
-						JSON.stringify(warnArray),
-						function () { }
-					)
-					await interaction.reply({ content: `Cleared ${interaction.options.getUser("user").tag}`, ephemaral: ptag })
-				} else {
+					}
+				)
+				fs.writeFile(
+					'./data/warns.json',
+					JSON.stringify(warnArray),
+					function () { }
+				)
+				await interaction.reply({ content: `Cleared ${interaction.options.getUser("user").tag}`, ephemaral: ptag })
+			} else {
 
-				}
-				cLog.loga(interuser, 'warn')
 			}
+			cLog.loga(interuser, 'warn')
 		} else if (commandName == "modnotes") {
-			const pc = permCheck()
-			if (pc === false) { deny(interuser, 'modnotes'); }
-			else {
-				let ptag;
-				if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
-				const notesArray = require('./data/modnotes.json')
-				if (interaction.options.getSubcommand() === 'show') {
-					/**
-					 * JSON scema:
-					 * {
-					 *	"moderatorid": {User.id},
-					 *	"userid": {User.id},
-					 *	"note": {String},
-					 *	"datestamp": {Date.now()}
-					 * }
-					 */
-					const fArray = { dataFound: [] }
-					notesArray.notes.forEach(
-						(data) => {
-							if (data.userid === interaction.options.getUser("user").id) {
-								fArray.dataFound[fArray.dataFound.length] = data
-								const modTag = client.users.cache.get(data.moderatorid)
-								const time = new Date(data.datestamp);
-								fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag;
-								fArray.dataFound[fArray.dataFound.length - 1].formatedDate = time
-									.toLocaleString('en-US', { timeZone: 'EST' });
-							}
+			let ptag;
+			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const notesArray = require('./data/modnotes.json')
+			if (interaction.options.getSubcommand() === 'show') {
+				/**
+				 * JSON scema:
+				 * {
+				 *	"moderatorid": {User.id},
+				 *	"userid": {User.id},
+				 *	"note": {String},
+				 *	"datestamp": {Date.now()}
+				 * }
+				 */
+				const fArray = { dataFound: [] }
+				notesArray.notes.forEach(
+					(data) => {
+						if (data.userid === interaction.options.getUser("user").id) {
+							fArray.dataFound[fArray.dataFound.length] = data
+							const modTag = client.users.cache.get(data.moderatorid)
+							const time = new Date(data.datestamp);
+							fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag;
+							fArray.dataFound[fArray.dataFound.length - 1].formatedDate = time
+								.toLocaleString('en-US', { timeZone: 'EST' });
 						}
-					)
-					const embed = new MessageEmbed()
-						.setTitle("Modnotes")
-						.setDescription(`Modnotes for ${interaction.options.getUser("user").tag}`)
-					fArray.dataFound.forEach((data, index) => {
-						embed
-							.addField(
-								`Modnote #${index + 1}`,
-								`Moderator: ${data.modTag}\nNote: ${data.note}\nDate: ${data.formatedDate}\nModnote ID: ${data.modnoteid}`,
-								false
-							)
-					})
-					await interaction.reply({ embeds: [embed], ephemeral: ptag })
-				}
-				// add modnote
-				else if (interaction.options.getSubcommand() === 'add') {
-					notesArray.notes[notesArray.notes.length] = {
-						moderatorid: interuser.id,
-						userid: interaction.options.getUser("user").id,
-						note: interaction.options.getString("note"),
-						datestamp: Date.now()
 					}
-					fs.writeFile(
-						'./data/modnotes.json',
-						JSON.stringify(notesArray),
-						function () { }
-					)
-					await interaction.reply(
-						{
-							content: `Added modnote to ${interaction.options.getUser("user").tag}`,
-							ephemeral: ptag
-						}
-					)
-				}
-				else if (interaction.options.getSubcommand() === 'delete') {
-					notesArray.notes.forEach(
-						(data, index) => {
-							if (data.userid === interaction.options.getUser("user").id && data.moderatorid === interaction.user.id) {
-								notesArray.notes.splice(index, 1)
-							}
-						}
-					)
-					fs.writeFile(
-						'./data/modnotes.json',
-						JSON.stringify(notesArray),
-						function () { }
-					)
-					await interaction.reply({ content: "Deleted", ephemeral: ptag })
-				}
-				cLog.loga(interuser, 'modnotes')
+				)
+				const embed = new MessageEmbed()
+					.setTitle("Modnotes")
+					.setDescription(`Modnotes for ${interaction.options.getUser("user").tag}`)
+				fArray.dataFound.forEach((data, index) => {
+					embed
+						.addField(
+							`Modnote #${index + 1}`,
+							`Moderator: ${data.modTag}\nNote: ${data.note}\nDate: ${data.formatedDate}\nModnote ID: ${data.modnoteid}`,
+							false
+						)
+				})
+				await interaction.reply({ embeds: [embed], ephemeral: ptag })
 			}
+			// add modnote
+			else if (interaction.options.getSubcommand() === 'add') {
+				notesArray.notes[notesArray.notes.length] = {
+					moderatorid: interuser.id,
+					userid: interaction.options.getUser("user").id,
+					note: interaction.options.getString("note"),
+					datestamp: Date.now()
+				}
+				fs.writeFile(
+					'./data/modnotes.json',
+					JSON.stringify(notesArray),
+					function () { }
+				)
+				await interaction.reply(
+					{
+						content: `Added modnote to ${interaction.options.getUser("user").tag}`,
+						ephemeral: ptag
+					}
+				)
+			}
+			else if (interaction.options.getSubcommand() === 'delete') {
+				notesArray.notes.forEach(
+					(data, index) => {
+						if (data.userid === interaction.options.getUser("user").id && data.moderatorid === interaction.user.id) {
+							notesArray.notes.splice(index, 1)
+						}
+					}
+				)
+				fs.writeFile(
+					'./data/modnotes.json',
+					JSON.stringify(notesArray),
+					function () { }
+				)
+				await interaction.reply({ content: "Deleted", ephemeral: ptag })
+			}
+			cLog.loga(interuser, 'modnotes')
 		} else if (commandName == "ban") {
-			const pc = permCheck()
-			if (pc === false) { deny(interuser, 'ban'); }
-			else {
-				let ptag;
-				if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
-				// ban user
-				const user = interaction.options.getUser("user")
-				await interaction.guild.members.ban(user, { reason: interaction.options.getString("reason") })
-				await interaction.reply(
-					{
-						content: `Banned ${user.tag} for ${interaction.options.getString("reason")}`,
-						ephemeral: ptag
-					}
-				)
-				cLog.loga(interuser, 'ban')
-			}
+			let ptag;
+			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			// ban user
+			const user = interaction.options.getUser("user")
+			await interaction.guild.members.ban(user, { reason: interaction.options.getString("reason") })
+			await interaction.reply(
+				{
+					content: `Banned ${user.tag} for ${interaction.options.getString("reason")}`,
+					ephemeral: ptag
+				}
+			)
+			cLog.loga(interuser, 'ban')
 		} else if (commandName == "unban") {
-			const pc = permCheck()
-			if (pc === false) { deny(interuser, 'unban'); }
-			else {
-				let ptag;
-				if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
-				const userid = interaction.options.getString("userid")
-				await interaction.guild.members.unban(userid);
-				const user = client.users.cache.get(userid);
-				interaction.reply({ content: `Unbanned ${user.tag}`, ephemeral: ptag })
-				cLog.loga(interuser, 'unban')
-			}
+			let ptag;
+			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const userid = interaction.options.getString("userid")
+			await interaction.guild.members.unban(userid);
+			const user = client.users.cache.get(userid);
+			interaction.reply({ content: `Unbanned ${user.tag}`, ephemeral: ptag })
+			cLog.loga(interuser, 'unban')
 		} else if (commandName == "timeout") {
-			const pc = permCheck()
-			if (pc === false) { deny(interuser, 'timeout'); }
-			else {
-				let ptag;
-				if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
-				const utm = interaction.guild.members.cache.get(interaction.options.getUser("user").id)
-				await utm.timeout(interaction.options.getInteger("minutes") * 60 * 1000)
-				await interaction.reply(
-					{
-						content: `Timed out ${interaction.options.getUser("user").tag} for ${interaction.options.getInteger("minutes")} minutes`,
-						ephemeral: ptag
-					}
-				)
-				cLog.loga(interuser, 'timeout')
-			}
+			let ptag;
+			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const utm = interaction.guild.members.cache.get(interaction.options.getUser("user").id)
+			await utm.timeout(interaction.options.getInteger("minutes") * 60 * 1000)
+			await interaction.reply(
+				{
+					content: `Timed out ${interaction.options.getUser("user").tag} for ${interaction.options.getInteger("minutes")} minutes`,
+					ephemeral: ptag
+				}
+			)
+			cLog.loga(interuser, 'timeout')
 		} else if (commandName == "kick") {
-			const pc = permCheck()
-			if (pc === false) { deny(interuser, 'warn'); }
-			else {
-				let ptag;
-				if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
-				const utm = interaction.guild.members.cache.get(interaction.options.getUser("user").id)
-				await utm.kick(interaction.options.getString("reason"))
-				await interaction.reply(
-					{
-						content: `Kicked ${interaction.options.getUser("user").tag} for ${interaction.options.getString("reason")}`,
-						ephemeral: ptag
-					}
-				)
-				cLog.loga(interuser, 'kick')
-			}
+			let ptag;
+			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const utm = interaction.guild.members.cache.get(interaction.options.getUser("user").id)
+			await utm.kick(interaction.options.getString("reason"))
+			await interaction.reply(
+				{
+					content: `Kicked ${interaction.options.getUser("user").tag} for ${interaction.options.getString("reason")}`,
+					ephemeral: ptag
+				}
+			)
+			cLog.loga(interuser, 'kick')
 		} else if (commandName == "qrule") {
 			// Switch reply based on what choice a user made
 			switch (interaction.options.getString("rule")) {
@@ -780,14 +789,14 @@ client.on(`interactionCreate`, async interaction => {
 					await interaction.reply("♥ don’t find gaps in the rules! staff members can strike you for anything they find doesn’t fit in our server.")
 					break;
 			}
-			cLog.loga(interuser,'qrule')
+			cLog.loga(interuser, 'qrule')
 		} else {
 			interaction.reply(
 				{
 					content: `This command hasn't been implemented yet. Please wait for <@${userid[0]}> to add it.`,
 					ephemeral: true
 				}
-				)
+			)
 			console.error("A user has triggered this to run, but a valid command option wasn't found")
 			throw new Error("A user has triggered this to run, but a valid command option wasn't found")
 		}

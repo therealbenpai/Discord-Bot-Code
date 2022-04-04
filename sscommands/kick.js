@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('kick')
         .setDescription('Kicks a user')
+        .setDefaultPermission(false)
         .addUserOption(option =>
             option
                 .setName("user")

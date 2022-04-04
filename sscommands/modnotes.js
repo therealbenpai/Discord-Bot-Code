@@ -4,6 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('modnotes')
 		.setDescription('Moderation notes for a user')
+		.setDefaultPermission(false)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("show")

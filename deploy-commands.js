@@ -54,7 +54,3 @@ rest2
     .put(Routes.applicationGuildCommands(clientId, guildId), { body: sscommands })
     .then(() => console.log('Successfully registered Guild application commands.'))
     .catch(console.error);
-
-async function cmdPerms() {
-    
-}

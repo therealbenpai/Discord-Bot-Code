@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('announce')
         .setDescription('Announce a message')
+        .setDefaultPermission(false)
         .addStringOption(option =>
             option
                 .setName('content')
