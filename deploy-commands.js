@@ -47,10 +47,14 @@ const rest2 = new REST({ version: '9' }).setToken(token);
 
 rest1
     .put(Routes.applicationCommands(clientId), { body: gcommands })
-    .then(() => console.log('Successfully registered Global application commands.'))
+    .then(_ => console.log('Successfully registered Global application commands.'))
     .catch(console.error);
 
 rest2
     .put(Routes.applicationGuildCommands(clientId, guildId), { body: sscommands })
     .then(() => console.log('Successfully registered Guild application commands.'))
     .catch(console.error);
+
+async function cmdPerms() {
+    
+}

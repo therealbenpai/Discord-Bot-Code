@@ -4,7 +4,6 @@ const { Builder, Embed } = require(`@discordjs/builders`);
 const wait = require(`util`).promisify(setTimeout);
 const StatusUpdater = require(`@tmware/status-rotate`)
 const fUUID = require(`uuid`)
-const cmdUtil = require('node-cmd')
 const fs = require('fs')
 
 //? Custom Utils
