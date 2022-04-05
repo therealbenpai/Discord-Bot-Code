@@ -1,6 +1,5 @@
 //? Require the necessary discord.js classes
 const { Client, Collection, Intents, guild, MessageEmbed, channel, User } = require(`discord.js`);
-const { Builder, Embed } = require(`@discordjs/builders`);
 const wait = require(`util`).promisify(setTimeout);
 const StatusUpdater = require(`@tmware/status-rotate`)
 const fUUID = require(`uuid`)
@@ -605,6 +604,17 @@ client.on(`interactionCreate`, async interaction => {
 						ephemeral: ptag
 					}
 				)
+				await interaction.options.getUser("user").send(
+					`You have been warned by ${interuser.tag} for ${interaction.options.getString("reason")}`
+				)
+				.catch(_ => {
+					interaction.followUp(
+						{
+							content: `Warning message failed to send to ${interaction.options.getUser("user").tag}`,
+							ephemeral: true
+						}
+					)
+				})
 			} else if (interaction.options.getSubcommand() === "del") {
 				warnArray.warns.forEach(
 					(data, index) => {
