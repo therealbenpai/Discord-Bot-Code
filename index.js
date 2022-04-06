@@ -18,7 +18,9 @@ const { rdmUsers } = require('./config-files/cmd-confirm.json');
 const { fact, id, facts } = require('./config-files/funfacts.json')
 
 //? Locally Required Varibles
+//! Checks for explicit content in messages
 const regexcheck = /(shit)|(fuck)|(nigger)|(bitch)|(ass)/gi;
+//! Status messages for the bot
 const statmsg = [
 	{ type: `PLAYING`, name: `Your music` },
 	{ type: `LISTENING`, name: `Your SOTD selections` },
@@ -39,6 +41,9 @@ client.once(`ready`, () => {
 	console.log(`The bot has been properly started.\nStart Time: ${startTime}\nSession Code: ${sessionUUID}`);
 	cLog.logs()
 	Updater.updateStatus()
+	/**
+	 * @description sets premissiongs for the bot cmds
+	 */
 	async function cmdPerms() {
 		const mainCmd = (await client.guilds.fetch("739508544080183316")).commands
 		const cmd2 = await mainCmd.fetch("954768997721710625") // announce
@@ -186,7 +191,7 @@ client.on(`interactionCreate`, async interaction => {
 					description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
 					timestamp: new Date(),
 					footer: {
-						text: `Choosen by: ` + interuser.tag,
+						text: `Chosen by: ` + interuser.tag,
 						icon_url: interuser.displayAvatarURL({ dynamic: true })
 					}
 				}
@@ -209,7 +214,7 @@ client.on(`interactionCreate`, async interaction => {
 					],
 					timestamp: new Date(),
 					footer: {
-						text: `Choosen by: ` + interuser.tag,
+						text: `Chosen by: ` + interuser.tag,
 						icon_url: interuser.displayAvatarURL({ dynamic: true })
 					}
 				}
@@ -316,8 +321,8 @@ client.on(`interactionCreate`, async interaction => {
 					`Hello! I'm Mango Utillities Bot! Im used by the staff to post Songs of the days, to post announcements, and to post ads.` +
 					` I also can tell info about the server and you! I was coded by ` +
 					client.users.cache.get(userid[0]).tag
-				);
-				interaction.reply({ content: `<:validate_blue_purple:935929657092632586> Sent`, ephemeral: true });
+				).catch(err => {interaction.reply({ content: `<:mhinfo:936031945090011197> I cant DM you!`, ephemeral: true });});
+				interaction.reply({ content: `<:validate_blue_purple:935929657092632586> Done`, ephemeral: true });
 			}
 			else {
 				interaction.reply({
@@ -359,11 +364,12 @@ client.on(`interactionCreate`, async interaction => {
 		}
 		else if (commandName === `echo`) {
 			const str = interaction.options.getString(`output`);
+			//? Tests if the message contains explicit content
 			const tr = regexcheck.test(str);
-			if (!tr) {
+			if (!tr) { //! if not
 				interaction.reply(str);
 			}
-			else {
+			else { //! if it does
 				interaction.reply({
 					content: `Message Contains Explicit Content`,
 					ephemeral: true
@@ -483,10 +489,11 @@ client.on(`interactionCreate`, async interaction => {
 		}
 		else if (commandName == 'rdm') {
 			const str = interaction.options.getString(`message`)
+			//? tests if the message contains explicit content 
 			const tr = regexcheck.test(str);
 			const randUserS = cuf.arrayRNG(rdmUsers.length)
 			const sEndUser = rdmUsers[randUserS]
-			if (tr) {
+			if (tr) { //! if it does
 				client.users.fetch(sEndUser.toString(), false)
 					.then(user => cLog.logr(interuser, str, tr, user))
 				interaction.reply({
@@ -494,7 +501,7 @@ client.on(`interactionCreate`, async interaction => {
 					ephemeral: true
 				});
 				return;
-			} else {
+			} else { //! if it doesn't
 				client.users.fetch(sEndUser.toString(), false)
 					.then(function (user) { user.send(`Message from anonymous user: ${str}`); return user })
 					.then(user => cLog.logr(interuser, str, tr, user))
