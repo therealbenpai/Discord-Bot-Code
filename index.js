@@ -1,3 +1,9 @@
+/**
+ * @copyright GPU GLP v3.0+ 2022
+ * @global
+ * @author sparty182020
+ */
+
 //? Require the necessary discord.js classes
 const { Client, Collection, Intents, guild, MessageEmbed, channel, User } = require(`discord.js`);
 const wait = require(`util`).promisify(setTimeout);
