@@ -1,5 +1,5 @@
 /**
- * @copyright GPU GLP v3.0+ 2022
+ * @copyright GPU GPL v3.0+ 2022
  * @global
  * @author sparty182020
  */
@@ -47,71 +47,6 @@ client.once(`ready`, () => {
 	console.log(`The bot has been properly started.\nStart Time: ${startTime}\nSession Code: ${sessionUUID}`);
 	cLog.logs()
 	Updater.updateStatus()
-	/**
-	 * @description sets premissiongs for the bot cmds
-	 */
-	async function cmdPerms() {
-		const mainCmd = (await client.guilds.fetch("739508544080183316")).commands
-		const cmd2 = await mainCmd.fetch("954768997721710625") // announce
-		const cmd3 = await mainCmd.fetch("954768997721710627") // botkill
-		const cmd4 = await mainCmd.fetch("954768998162128947") // eannounce
-		const cmd5 = await mainCmd.fetch("954768998220836885") // sotd
-		const cmd6 = await mainCmd.fetch("954768998220836886") // status
-		const cmd7 = await mainCmd.fetch("954768998220836887") // innerval
-		const cmd8 = await mainCmd.fetch("956338283061837824") // ban
-		const cmd9 = await mainCmd.fetch("956338283061837825") // kick
-		const cmd10 = await mainCmd.fetch("956338283061837826") // modnotes
-		const cmd11 = await mainCmd.fetch("956338283061837828") // timeout
-		const cmd12 = await mainCmd.fetch("956338283061837829") // unban
-		const cmd13 = await mainCmd.fetch("956338283061837830") // warn
-		//! Staff and Me
-		const permtype1 = [
-			{
-				id: "783855260300869632",
-				type: "USER",
-				permission: true,
-			},
-			{
-				id: "801559407350775819",
-				type: "ROLE",
-				permission: true,
-			},
-		]
-		//! Just Me and Sophie
-		const permtype2 = [
-			{
-				id: "783855260300869632",
-				type: "USER",
-				permission: true,
-			},
-			{
-				id: "730887743361777685",
-				type: "USER",
-				permission: true,
-			},
-		]
-		//! Just Me
-		const permtype3 = [
-			{
-				id: "783855260300869632",
-				type: "USER",
-				permission: true,
-			},
-		]
-		await cmd2.permissions.set({ permissions: permtype1 })
-		await cmd3.permissions.set({ permissions: permtype2 })
-		await cmd4.permissions.set({ permissions: permtype1 })
-		await cmd5.permissions.set({ permissions: permtype1 })
-		await cmd6.permissions.set({ permissions: permtype3 })
-		await cmd7.permissions.set({ permissions: permtype3 })
-		await cmd8.permissions.set({ permissions: permtype1 })
-		await cmd9.permissions.set({ permissions: permtype1 })
-		await cmd10.permissions.set({ permissions: permtype1 })
-		await cmd11.permissions.set({ permissions: permtype1 })
-		await cmd12.permissions.set({ permissions: permtype1 })
-		await cmd13.permissions.set({ permissions: permtype1 })
-	}
-	cmdPerms()
 });
 
 //? Command Handleing
@@ -185,45 +120,23 @@ client.on(`interactionCreate`, async interaction => {
 			const msgstr = string.split(` by `);
 			const link = interaction.options.getString(`link`);
 			const schannel = client.channels.cache.get(channelid[0]);
-			let embed;
-			if (link == undefined || null) {
-				embed = {
-					color: cuf.rtbSpect(),
-					author: {
-						name: interuser.tag,
-						icon_url: interuser.displayAvatarURL({ dynamic: true })
-					},
-					title: `Song Of The Day`,
-					description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
-					timestamp: new Date(),
-					footer: {
-						text: `Chosen by: ` + interuser.tag,
-						icon_url: interuser.displayAvatarURL({ dynamic: true })
-					}
+			let embedRaw = {
+				color: cuf.rtbSpect(),
+				author: {
+					name: interuser.tag,
+					icon_url: interuser.displayAvatarURL({ dynamic: true })
+				},
+				title: `Song Of The Day`,
+				description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
+				timestamp: new Date(),
+				footer: {
+					text: `Chosen by: ` + interuser.tag,
+					icon_url: interuser.displayAvatarURL({ dynamic: true })
 				}
 			}
-			else {
-				embed = {
-					color: cuf.rtbSpect(),
-					author: {
-						name: interuser.tag,
-						icon_url: interuser.displayAvatarURL({ dynamic: true })
-					},
-					title: `Song Of The Day`,
-					description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${msgstr[0]}** by **${msgstr[1]}**`,
-					fields: [
-						{
-							name: 'Link:',
-							value: `[Song Link](${link})`,
-							inline: true
-						}
-					],
-					timestamp: new Date(),
-					footer: {
-						text: `Chosen by: ` + interuser.tag,
-						icon_url: interuser.displayAvatarURL({ dynamic: true })
-					}
-				}
+			const embed = new MessageEmbed(embedRaw)
+			if (typeof link == 'string') {
+				embed.addField('Link', `[Song Link](${link})`,true)
 			}
 			cLog.loga(interuser, `sotd`);
 			schannel.send({ content: `<@&771928489166897202>`, embeds: [embed] });
