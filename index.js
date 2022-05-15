@@ -136,7 +136,7 @@ client.on(`interactionCreate`, async interaction => {
 			}
 			const embed = new MessageEmbed(embedRaw)
 			if (typeof link == 'string') {
-				embed.addField('Link', `[Song Link](${link})`,true)
+				embed.addField('Link', `[Song Link](${link})`, true)
 			}
 			cLog.loga(interuser, `sotd`);
 			schannel.send({ content: `<@&771928489166897202>`, embeds: [embed] });
@@ -240,7 +240,7 @@ client.on(`interactionCreate`, async interaction => {
 					`Hello! I'm Mango Utillities Bot! Im used by the staff to post Songs of the days, to post announcements, and to post ads.` +
 					` I also can tell info about the server and you! I was coded by ` +
 					client.users.cache.get(userid[0]).tag
-				).catch(err => {interaction.reply({ content: `<:mhinfo:936031945090011197> I cant DM you!`, ephemeral: true });});
+				).catch(err => { interaction.reply({ content: `<:mhinfo:936031945090011197> I cant DM you!`, ephemeral: true }); });
 				interaction.reply({ content: `<:validate_blue_purple:935929657092632586> Done`, ephemeral: true });
 			}
 			else {
@@ -471,19 +471,8 @@ client.on(`interactionCreate`, async interaction => {
 		// 	})
 		// 	cLog.loga(interuser, 'uptime')
 		// }
-		else if (commandName == 'restart') {
-			if (interuser.id === userid[0]) {
-				await interaction.reply({ content: 'Restarting...', ephemeral: true })
-				cLog.loga(interuser, 'restart')
-				process.exit()
-			}
-			else {
-				deny(interuser, 'restart')
-			}
-		}
 		else if (commandName === 'warn') {
-			let ptag;
-			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const ptag = !interaction.options.getBoolean("public")
 			const warnArray = require('./data/warns.json')
 			if (interaction.options.getSubcommand() === 'show') {
 				const fArray = { dataFound: [] }
@@ -533,14 +522,14 @@ client.on(`interactionCreate`, async interaction => {
 				await interaction.options.getUser("user").send(
 					`You have been warned by ${interuser.tag} for ${interaction.options.getString("reason")}`
 				)
-				.catch(_ => {
-					interaction.followUp(
-						{
-							content: `Warning message failed to send to ${interaction.options.getUser("user").tag}`,
-							ephemeral: true
-						}
-					)
-				})
+					.catch(_ => {
+						interaction.followUp(
+							{
+								content: `Warning message failed to send to ${interaction.options.getUser("user").tag}`,
+								ephemeral: true
+							}
+						)
+					})
 			} else if (interaction.options.getSubcommand() === "del") {
 				warnArray.warns.forEach(
 					(data, index) => {
@@ -574,8 +563,7 @@ client.on(`interactionCreate`, async interaction => {
 			}
 			cLog.loga(interuser, 'warn')
 		} else if (commandName == "modnotes") {
-			let ptag;
-			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const ptag = !interaction.options.getBoolean("public")
 			const notesArray = require('./data/modnotes.json')
 			if (interaction.options.getSubcommand() === 'show') {
 				/**
@@ -619,7 +607,8 @@ client.on(`interactionCreate`, async interaction => {
 					moderatorid: interuser.id,
 					userid: interaction.options.getUser("user").id,
 					note: interaction.options.getString("note"),
-					datestamp: Date.now()
+					datestamp: Date.now(),
+					modnoteid: fUUID.v4()
 				}
 				fs.writeFile(
 					'./data/modnotes.json',
@@ -650,8 +639,7 @@ client.on(`interactionCreate`, async interaction => {
 			}
 			cLog.loga(interuser, 'modnotes')
 		} else if (commandName == "ban") {
-			let ptag;
-			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const ptag = !interaction.options.getBoolean("public")
 			// ban user
 			const user = interaction.options.getUser("user")
 			await interaction.guild.members.ban(user, { reason: interaction.options.getString("reason") })
@@ -663,16 +651,14 @@ client.on(`interactionCreate`, async interaction => {
 			)
 			cLog.loga(interuser, 'ban')
 		} else if (commandName == "unban") {
-			let ptag;
-			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const ptag = !interaction.options.getBoolean("public")
 			const userid = interaction.options.getString("userid")
 			await interaction.guild.members.unban(userid);
 			const user = client.users.cache.get(userid);
 			interaction.reply({ content: `Unbanned ${user.tag}`, ephemeral: ptag })
 			cLog.loga(interuser, 'unban')
 		} else if (commandName == "timeout") {
-			let ptag;
-			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const ptag = !interaction.options.getBoolean("public")
 			const utm = interaction.guild.members.cache.get(interaction.options.getUser("user").id)
 			await utm.timeout(interaction.options.getInteger("minutes") * 60 * 1000)
 			await interaction.reply(
@@ -683,8 +669,7 @@ client.on(`interactionCreate`, async interaction => {
 			)
 			cLog.loga(interuser, 'timeout')
 		} else if (commandName == "kick") {
-			let ptag;
-			if (interaction.options.getBoolean("public") == true) { ptag = false } else { ptag = true }
+			const ptag = !interaction.options.getBoolean("public")
 			const utm = interaction.guild.members.cache.get(interaction.options.getUser("user").id)
 			await utm.kick(interaction.options.getString("reason"))
 			await interaction.reply(
@@ -696,36 +681,58 @@ client.on(`interactionCreate`, async interaction => {
 			cLog.loga(interuser, 'kick')
 		} else if (commandName == "qrule") {
 			// Switch reply based on what choice a user made
+			const cembed = new MessageEmbed()
+				.setTitle(`Quick rule #${interaction.options.getString("rule").toString().slice(1)}`)
+			let m;
 			switch (interaction.options.getString("rule")) {
 				case "r1":
-					await interaction.reply("♥︎ no racism, homophobia, or any form of discrimination, WHATSOEVER. **FAILURE TO ABIDE BY THIS RULE WILL RESULT IN A BAN**")
+					m = "♥︎ no racism, homophobia, or any form of discrimination, WHATSOEVER. **FAILURE TO ABIDE BY THIS RULE WILL RESULT IN A BAN**"
 					break;
 				case "r2":
-					await interaction.reply("♥︎ use the right channels. (eg general talk in <#852259627332927490>)")
+					m = "♥︎ use the right channels. (eg general talk in <#852259627332927490>)"
 					break;
 				case "r3":
-					await interaction.reply("♥︎ don't mass ping roles")
+					m = "♥︎ don't mass ping roles"
 					break;
 				case "r4":
-					await interaction.reply("♥︎ keep the convos clean. No porn/nsfw please. Talking about it is fine, just no content that may contain graphic content.")
+					m = "♥︎ keep the convos clean. No porn/nsfw please. Talking about it is fine, just no content that may contain graphic content."
 					break;
 				case "r5":
-					await interaction.reply("♥︎ don't spam")
+					m = "♥︎ don't spam"
 					break;
 				case "r6":
-					await interaction.reply("♥ no offensive nicknames or profile pics. eg; ||Hitler||")
+					m = "♥ no offensive nicknames or profile pics. eg; ||Hitler||"
 					break;
 				case "r7":
-					await interaction.reply("♥ don’t ask for staff roles. We have enough of them already")
+					m = "♥ don’t ask for staff roles. We have enough of them already"
 					break;
 				case "r8":
-					await interaction.reply("♥ mark triggering topics with trigger warnings, and cover the words with two “|” on each side. like so (eg. \|\|text\|\| turns into ||text||)")
+					m = "♥ mark triggering topics with trigger warnings, and cover the words with two “|” on each side. like so (eg. \|\|text\|\| turns into ||text||)"
 					break;
 				case "r9":
-					await interaction.reply("♥ don’t find gaps in the rules! staff members can strike you for anything they find doesn’t fit in our server.")
+					m = "♥ don’t find gaps in the rules! staff members can strike you for anything they find doesn’t fit in our server."
 					break;
 			}
+			cembed.setDescription(m)
+			cembed.setColor(cuf.randHex("#"))
+			interaction.reply({ embed: cembed })
 			cLog.loga(interuser, 'qrule')
+		} else if (commandName === "logs") {
+			const tsregex = /([0-9]{2}\/[0-9]{2}\/[0-9]{2})/mi
+			const sessionregex = /(Session Info :)/mi
+			const ptag = !interaction.options.getBoolean("public")
+			let data = fs.readFileSync(`./logs/${interaction.options.getSubcommand()}.log`, 'utf8')
+			if (data.length > 2000) {
+				const tdata = data.slice(data.length - 2001, data.length - 1)
+				if (interaction.options.getSubcommand() === "session") {
+					data = tdata.slice(tdata.search(sessionregex))
+				}
+				else {
+					data = tdata.slice(tdata.search(tsregex))
+				}
+			}
+			interaction.reply({ content: data, ephemeral: ptag })
+			cLog.loga(interuser, 'logs')
 		} else {
 			interaction.reply(
 				{
