@@ -59,6 +59,17 @@ function loge(user, message, exp) {
     )
 }
 
+function logrant(user, rantID) {
+    fs.appendFile(
+        './logs/rantlog.log',
+        `${cuf.getFullDate()} :
+        - UserID: ${user.id}
+        - User: ${user.tag}
+        - RantID: ${rantID}\n`,
+        function () { }
+    )
+}
+
 /**
  * @copyright GNU (v3)
  * @author sparty18202
@@ -78,7 +89,7 @@ function logs() {
  * @copyright GNU (v3)
  * @author sparty18202
  * @param {User} user The user that used the command
- * @param {String} msg Message Sent
+ * @param {String} message Message Sent
  * @param {Boolean} exp Explicit Message Boolean
  * @param {User} enduser The receiving user
  */
@@ -116,3 +127,4 @@ exports.loge = loge
 exports.logs = logs
 exports.logr = logr
 exports.logerr = logerr
+exports.logrant = logrant

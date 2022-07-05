@@ -1,9 +1,10 @@
+// @ts-nocheck
 /**
  * @copyright GPU GPL v3.0+ 2022
  * @global
  * @author sparty182020
  */
-
+var ones = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 //? Require the necessary discord.js classes
 const {
 	Client,
@@ -30,7 +31,7 @@ const { token, secret_key } = require(`./config-files/config.json`);
 const { userid, channelid, roleid } = require(`./config-files/ids.json`);
 const { truth, dare } = require(`./config-files/tod.json`)
 const { rdmUsers } = require('./config-files/cmd-confirm.json');
-const { fact, id, facts } = require('./config-files/funfacts.json')
+const { facts } = require('./config-files/funfacts.json')
 
 //? Locally Required Varibles
 //! Checks for explicit content in messages
@@ -48,7 +49,7 @@ var seconds = 30
 const fStartTime = Date.now()
 
 //? Discord Configuration
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
 const Updater = new StatusUpdater(client, statmsg)
 
 //? On startup code
@@ -110,24 +111,20 @@ client.on(`interactionCreate`, async interaction => {
 
 		try {
 			//? Command Reponses
-			if (commandName === `ping`) {
+			if (commandName == `ping`) {
 				await interaction.reply(`Pong!`);
-			}
-			else if (commandName === `server`) {
+			} else if (commandName == `server`) {
 				await interaction.reply(
 					`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`
 				);
-			}
-			else if (commandName === `user`) {
+			} else if (commandName == `user`) {
 				await interaction.reply(`User info.`);
-			}
-			else if (commandName === `botkill`) {
+			} else if (commandName == `botkill`) {
 				await interaction.reply(`Killing the bot`);
 				client.user.setStatus(`invisible`);
 				console.error(`Bot Ended. Reason: Native Command Quit by: ` + interaction.user.tag);
 				process.exit();
-			}
-			else if (commandName === `sotd`) {
+			} else if (commandName == `sotd`) {
 				const modal = new Modal()
 					.setCustomId('songOfTheDay')
 					.setTitle('Song of the Day Form');
@@ -150,11 +147,9 @@ client.on(`interactionCreate`, async interaction => {
 				modal.addComponents(firstActionRow, secondActionRow);
 				await interaction.showModal(modal);
 				// SPLITTER
-			}
-			else if (commandName === `newchannel`) {
+			} else if (commandName == `newchannel`) {
 				await interaction.reply(`nope not in the mood`);
-			}
-			else if (commandName === `ad`) {
+			} else if (commandName == `ad`) {
 				const adchannel = client.channels.cache.get(channelid[1]);
 				const title = interaction.options.getString(`title`);
 				const description = interaction.options.getString(`description`);
@@ -176,8 +171,7 @@ client.on(`interactionCreate`, async interaction => {
 				adchannel.send({ embeds: [nembed] });
 				await interaction.reply(`<:mhallow:936031945027096586> Posted!`);
 				cLog.loga(interuser, `ad`);
-			}
-			else if (commandName === `addstaff`) {
+			} else if (commandName == `addstaff`) {
 				if (intermember.roles.cache.has(roleid[1] | roleid[2]) || interuser.id === userid[0]) {
 					if (!intermember.roles.cache.has(roleid[0])) {
 						const role = interaction.guild.roles.cache.find(role => role.id = roleid[0]);
@@ -195,8 +189,7 @@ client.on(`interactionCreate`, async interaction => {
 				else {
 					deny(interuser, `addstaff`);
 				}
-			}
-			else if (commandName === `announce`) {
+			} else if (commandName == `announce`) {
 				const pingbol = interaction.options.getBoolean(`ping`);
 				const content = interaction.options.getString(`content`);
 				const achannel = client.channels.cache.get(channelid[2]);
@@ -213,8 +206,7 @@ client.on(`interactionCreate`, async interaction => {
 				}
 				interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
 				cLog.loga(interuser, `announce`);
-			}
-			else if (commandName === `eannounce`) {
+			} else if (commandName == `eannounce`) {
 				const pingbol = interaction.options.getBoolean(`ping`);
 				const content = interaction.options.getString(`content`);
 				const achannel = client.channels.cache.get(channelid[2]);
@@ -237,8 +229,7 @@ client.on(`interactionCreate`, async interaction => {
 				achannel.send({ embeds: [embed] })
 				interaction.reply({ content: `<:mhallow:936031945027096586> Posted`, ephemeral: true });
 				cLog.loga(interuser, `eannounce`);
-			}
-			else if (commandName === `about`) {
+			} else if (commandName == `about`) {
 				const bol = interaction.options.getBoolean(`dm`);
 				if (bol == true) {
 					const user = client.users.cache.get(interuser.id);
@@ -259,8 +250,7 @@ client.on(`interactionCreate`, async interaction => {
 					});
 				}
 				cLog.loga(interuser, `about`);
-			}
-			else if (commandName === `balls`) {
+			} else if (commandName == `balls`) {
 				const member1 = intermember;
 				if (permCheck() == false) {
 					const user = interuser;
@@ -286,8 +276,7 @@ client.on(`interactionCreate`, async interaction => {
 					}
 				}
 				cLog.loga(interuser, `balls`);
-			}
-			else if (commandName === `echo`) {
+			} else if (commandName == `echo`) {
 				const str = interaction.options.getString(`output`);
 				//? Tests if the message contains explicit content
 				const tr = regexcheck.test(str);
@@ -302,8 +291,7 @@ client.on(`interactionCreate`, async interaction => {
 				}
 				cLog.loge(interuser, str, tr)
 				cLog.loga(interuser, `echo`);
-			}
-			else if (commandName === `truth`) {
+			} else if (commandName == `truth`) {
 				let embed;
 				if (interaction.user.id == "589972995825729559") {
 					embed = new MessageEmbed()
@@ -323,8 +311,7 @@ client.on(`interactionCreate`, async interaction => {
 				}
 				interaction.reply({ embeds: [embed] })
 				cLog.loga(interuser, `truth`)
-			}
-			else if (commandName === `dare`) {
+			} else if (commandName == `dare`) {
 				const rn = cuf.arrayRNG(dare.length)
 				const output = dare[rn]
 				const embed = new MessageEmbed()
@@ -334,8 +321,7 @@ client.on(`interactionCreate`, async interaction => {
 					.setTimestamp()
 				interaction.reply({ embeds: [embed] })
 				cLog.loga(interuser, `dare`)
-			}
-			else if (commandName === `tod`) {
+			} else if (commandName == `tod`) {
 				const choose = function () {
 					const num = Math.floor(Math.random() * 2)
 					if (num === 0) {
@@ -379,8 +365,7 @@ client.on(`interactionCreate`, async interaction => {
 				}
 				interaction.reply({ embeds: [embed] })
 				cLog.loga(interuser, `tod`)
-			}
-			else if (commandName == 'status') {
+			} else if (commandName == 'status') {
 				let ctype = interaction.options.getString("type")
 				let cmessage = interaction.options.getString("status")
 				Updater.addStatus(
@@ -394,8 +379,7 @@ client.on(`interactionCreate`, async interaction => {
 					content: `Status Added`,
 					ephemeral: true
 				})
-			}
-			else if (commandName == 'innerval') {
+			} else if (commandName == 'innerval') {
 				if (interaction.options.getInteger('time') <= 30) {
 					interaction.reply({
 						content: `Time needs to be greater than 30`,
@@ -411,8 +395,7 @@ client.on(`interactionCreate`, async interaction => {
 					})
 					console.log(`Status clock timer has been updated to ${seconds}s`)
 				}
-			}
-			else if (commandName == 'rdm') {
+			} else if (commandName == 'rdm') {
 				const str = interaction.options.getString(`message`)
 				//? tests if the message contains explicit content 
 				const tr = regexcheck.test(str);
@@ -436,12 +419,10 @@ client.on(`interactionCreate`, async interaction => {
 					});
 				}
 				cLog.loga(interuser, 'rdm')
-			}
-			else if (commandName == 'session') {
+			} else if (commandName == 'session') {
 				interaction.reply(`Session start = **${startTime}**\nSession UUID: **${sessionUUID}**`)
 				cLog.loga(interuser, `session`)
-			}
-			else if (commandName == 'randomfact') {
+			} else if (commandName == 'randomfact') {
 				const random = cuf.arrayRNG(facts.length)
 				const fact = facts[random].fact
 				const factID = facts[random].id
@@ -450,34 +431,10 @@ client.on(`interactionCreate`, async interaction => {
 				)
 				await interaction.followUp(`*fact id: **${factID}***`)
 				cLog.loga(interuser, 'randomfact')
-			}
-			else if (commandName == 'feedback') {
+			} else if (commandName == 'feedback') {
 				interaction.reply(`<@${interuser.id}> Yow can submit feed back at https://forms.gle/9hMETLrL6ihvc5xv8`)
 				cLog.loga(interuser, 'feedback')
-			}
-			// else if (commandName == 'uptime') {
-			// 	function getElapsedTime() {
-			// 		const currentTime = null;
-			// 		const stime = {
-			// 			days : (fStartTime - (fStartTime % (24*60*60*1000))) / (24*60*60*1000),
-			// 			hours : ((fStartTime - (fStartTime % (60*60*1000))) / (60*60*1000)) % 24,
-			// 			minutes : ((fStartTime - (fStartTime % (60*1000))) / (60*1000)) % (24*60),
-			// 			seconds : ((fStartTime - (fStartTime % 1000)) / 1000) % (24*60*60)
-			// 		}
-			// 		const elapedStr = ``
-			// 		const str = `Bot Uptime Details:
-			// 		Start Time: **${startTime}**
-			// 		Current Time: **${cuf.getTime()}**
-			// 		Elasped Time: **${elapedStr}**`
-			// 		return str;
-			// 	}
-			// 	interaction.reply({
-			// 		content: getElapsedTime(),
-			// 		ephemeral: true
-			// 	})
-			// 	cLog.loga(interuser, 'uptime')
-			// }
-			else if (commandName === 'warn') {
+			} else if (commandName == 'warn') {
 				const ptag = !interaction.options.getBoolean("public")
 				const warnArray = require('./data/warns.json')
 				if (interaction.options.getSubcommand() === 'show') {
@@ -723,7 +680,7 @@ client.on(`interactionCreate`, async interaction => {
 				cembed.setColor(cuf.randHex("#"))
 				interaction.reply({ embed: cembed })
 				cLog.loga(interuser, 'qrule')
-			} else if (commandName === "logs") {
+			} else if (commandName == "logs") {
 				const tsregex = /([0-9]{2}\/[0-9]{2}\/[0-9]{2})/mi
 				const sessionregex = /(Session Info :)/mi
 				const ptag = !interaction.options.getBoolean("public")
@@ -753,6 +710,49 @@ client.on(`interactionCreate`, async interaction => {
 				await interaction.showModal(modal);
 				await interaction.reply({ content: ' ', ephemeral: true })
 				cLog.loga(interuser, 'test')
+			} else if (commandName == "poll") {
+				const modal = new Modal()
+					.setCustomId(interaction.options.getSubcommand())
+					.setTitle('Polls');
+				const minput = new TextInputComponent()
+					.setCustomId('prompt')
+					.setLabel("Poll Prompt")
+					.setStyle('SHORT')
+					.setRequired(true);
+				const mactionRow = new MessageActionRow().addComponents(minput);
+				modal.addComponents(mactionRow);
+				if (interaction.options.getSubcommand() === "yn") {
+					await interaction.showModal(modal);
+				} else if (interaction.options.getSubcommand() == "multi") {
+					let input = []
+					const amount = interaction.options.getInteger("amount")
+					for (let i = 1; i <= amount; i++) {
+						input[i] = new TextInputComponent()
+							.setCustomId(`option${i}`)
+							.setLabel(`option ${i}`)
+							.setStyle('SHORT')
+							.setRequired(true);
+						modal.addComponents(new MessageActionRow().addComponents(input[i]))
+					}
+					interaction.showModal(modal);
+				}
+				cLog.loga(interuser, 'polls')
+			} else if (commandName == "private") {
+				if (interaction.options.getSubcommand() == "rant") {
+					const rant = client.channels.cache.get(channelid[3])
+					const rantMsg = `${interaction.options.getString("msg")}`
+					const rantID = fUUID.v4()
+					const embed = new MessageEmbed()
+						.setColor(cuf.randHex("#"))
+						.setTitle("Anonymous Rant")
+						.setDescription(rantMsg)
+						.setTimestamp()
+						.setFooter({ text: `Rant ID: ${rantID}`});
+					rant.send({ content: "​", embeds: [embed] })
+					interaction.reply({ content: 'Rant Posted', ephemeral: true })
+					cLog.loga(interuser, 'private')
+					cLog.logrant(interuser, rantID)
+				}
 			} else {
 				interaction.reply(
 					{
@@ -770,7 +770,7 @@ client.on(`interactionCreate`, async interaction => {
 	else if (interaction.isModalSubmit()) {
 		if (interaction.customId == "testingModal") {
 			let found;
-			const {keys} = require('./data/id_key_pairs.json')
+			const { keys } = require('./data/id_key_pairs.json')
 			const enteredKey = interaction.fields.getField('sec1').value
 			const chash = crypto.createHmac('sha512', secret_key)
 				.update(enteredKey)
@@ -782,28 +782,61 @@ client.on(`interactionCreate`, async interaction => {
 			})
 			if (!found) interaction.reply({ content: 'Invalid ID or Key.', ephemeral: true })
 		} else if (interaction.customId == "songOfTheDay") {
-			await interaction.deferReply({ephemeral: true});
+			await interaction.deferReply({ ephemeral: true });
 			const song = interaction.fields.getField('title').value
 			const artist = interaction.fields.getField('artist').value
 			const schannel = client.channels.cache.get(channelid[0]);
 			let embedRaw = {
-					color: cuf.rtbSpect(),
-					author: {
-						name: interaction.user.tag,
-						icon_url: interaction.user.displayAvatarURL({ dynamic: true })
-					},
-					title: `Song Of The Day`,
-					description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${song}** by **${artist}**`,
-					timestamp: new Date(),
-					footer: {
-						text: `Chosen by: ` + interaction.user.tag,
-						icon_url: interaction.user.displayAvatarURL({ dynamic: true })
-					}
+				color: cuf.rtbSpect(),
+				author: {
+					name: interaction.user.tag,
+					icon_url: interaction.user.displayAvatarURL({ dynamic: true })
+				},
+				title: `Song Of The Day`,
+				description: `**♪♫.ılılıll|llılılı.♫♪\ntoday’s song is:**\n\n**${song}** by **${artist}**`,
+				timestamp: new Date(),
+				footer: {
+					text: `Chosen by: ` + interaction.user.tag,
+					icon_url: interaction.user.displayAvatarURL({ dynamic: true })
 				}
-				const embed = new MessageEmbed(embedRaw)
-				cLog.loga(interaction.user, `sotd`);
-				await schannel.send({ content: `<@&771928489166897202>`, embeds: [embed] });
-				await interaction.editReply(`<:mhallow:936031945027096586> Sent the SOTD embed`);
+			}
+			const embed = new MessageEmbed(embedRaw)
+			cLog.loga(interaction.user, `sotd`);
+			await schannel.send({ content: `<@&771928489166897202>`, embeds: [embed] });
+			await interaction.editReply(`<:mhallow:936031945027096586> Sent the SOTD embed`);
+		} else if (interaction.customId == "yn") {
+			const prompt = interaction.fields.getField('prompt').value
+			const msg = await interaction.reply({ content: `**${prompt}**`, fetchReply: true })
+			await msg.react('👍')
+			await msg.react('👎')
+		} else if (interaction.customId == "multi") {
+			const prompt = interaction.fields.getField('prompt').value
+			const options = []
+			let optmsg = "\n"
+			let fullmsg;
+			try {
+				options[0] = interaction.fields.getField('option1').value
+			} catch (err) { }
+			try {
+				options[1] = interaction.fields.getField('option2').value
+			} catch (err) { }
+			try {
+				options[2] = interaction.fields.getField('option3').value
+			} catch (err) { }
+			try {
+				options[3] = interaction.fields.getField('option4').value
+			} catch (err) { }
+			await options.forEach((value, index) => {
+				optmsg += `\n:${ones[index + 1]}: **${value}**`
+			})
+			fullmsg = `**${prompt}**${optmsg}`
+			const msg = await interaction.reply({ content: fullmsg, fetchReply: true })
+			for (let i = 1; i <= options.length; i++) {
+				if (i == 1) { msg.react(`1️⃣`) }
+				if (i == 2) { msg.react(`2️⃣`) }
+				if (i == 3) { msg.react(`3️⃣`) }
+				if (i == 4) { msg.react(`4️⃣`) }
+			}
 		}
 	}
 });
