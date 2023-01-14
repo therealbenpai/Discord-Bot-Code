@@ -442,7 +442,7 @@ client.on(`interactionCreate`, async interaction => {
 					warnArray.warns.forEach(
 						(data) => {
 							if (data.userid === interaction.options.getUser("user").id) {
-								fArray.dataFound[fArray.dataFound.length] = data
+								fArray.dataFound.push(data)
 								const modTag = client.users.cache.get(data.modid)
 								const time = new Date(data.datestamp);
 								fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag;
@@ -464,13 +464,13 @@ client.on(`interactionCreate`, async interaction => {
 					})
 					await interaction.reply({ embeds: [embed], ephemeral: ptag })
 				} else if (interaction.options.getSubcommand() === "add") {
-					warnArray.warns[warnArray.warns.length] = {
+					warnArray.warns.push({
 						userid: interaction.options.getUser("user").id,
 						modid: interuser.id,
 						reason: interaction.options.getString("reason"),
 						datestamp: Date.now(),
 						warnid: fUUID.v4()
-					}
+					})
 					fs.writeFile(
 						'./data/warns.json',
 						JSON.stringify(warnArray),
@@ -542,7 +542,7 @@ client.on(`interactionCreate`, async interaction => {
 					notesArray.notes.forEach(
 						(data) => {
 							if (data.userid === interaction.options.getUser("user").id) {
-								fArray.dataFound[fArray.dataFound.length] = data
+								fArray.dataFound.push(data)
 								const modTag = client.users.cache.get(data.moderatorid)
 								const time = new Date(data.datestamp);
 								fArray.dataFound[fArray.dataFound.length - 1].modTag = modTag.tag;
@@ -566,13 +566,13 @@ client.on(`interactionCreate`, async interaction => {
 				}
 				// add modnote
 				else if (interaction.options.getSubcommand() === 'add') {
-					notesArray.notes[notesArray.notes.length] = {
+					notesArray.notes.push({
 						moderatorid: interuser.id,
 						userid: interaction.options.getUser("user").id,
 						note: interaction.options.getString("note"),
 						datestamp: Date.now(),
 						modnoteid: fUUID.v4()
-					}
+					})
 					fs.writeFile(
 						'./data/modnotes.json',
 						JSON.stringify(notesArray),

@@ -1,16 +1,12 @@
 function rng1(min,max) {
-	if (max < min || max == min) {return "Please Fix MIN-MAX ratio"}
-	const tRange = max - min
-	const random = Math.floor(Math.random()*tRange) + min
-	return random
+	if (max <= min) throw new Error("Please Fix MIN-MAX ratio");
+	return Math.floor(Math.random()*(max - min)) + min
+}
 
-}
-function rng2(max) {
-	const random = Math.round(Math.random() * max)
-	return random
-}
+const rng2 = (max) => Math.round(Math.random() * max)
+
 function arrayRNG(length) {
-	if (length <= 0) {return "length must be greater than one"}
+	if (length <= 0) return "length must be greater than one";
 	const tRange = length - 1
 	const random = Math.floor(Math.random()*tRange)
 	return random
@@ -65,16 +61,8 @@ function randHex(prefix) {
 	return `${prefix}${hex}`
 }
 function rtbSpect() {
-	const spot = arrayRNG(colorp.colorpc.length)
-	return String(colorp.colorpc[spot])
+	return "" + colorp.colorpc[arrayRNG(colorp.colorpc.length)]
 }
 
 //? Exports
-exports.getTime = getTime
-exports.getDate = getDate
-exports.getFullDate = getFullDate
-exports.randHex = randHex
-exports.arrayRNG = arrayRNG
-exports.rtbSpect = rtbSpect
-exports.rng1 = rng1
-exports.rng2 = rng2
+module.exports = { rng1, rng2, arrayRNG, colorp, isDST, getTime, getDate, getFullDate, randHex, rtgSpect}
